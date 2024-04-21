@@ -21,7 +21,14 @@ Los recursos usados se almacenan utilizando [Git LFS](https://git-lfs.github.com
 ## Integrantes
 
 TGC, Tgcito  |  Apellido, Nombre
------------- | -------------
+
+203.426-8    | Boschini, Maria Carolina
+203.607-1    | Fernandez Fiel, Lucas Ezequiel
+173.025-3    | Krahl Vitale, Tomás 
+176.552-8    | Lucena, Nicolas Agustin 
+153.851-2    | Mon, Matias 
+173.277-8    | Opderbeck, Sebastian  
+    
 | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/robotgc.png" height="500"> | <img src="https://github.com/tgc-utn/tgc-utn.github.io/blob/master/images/trofeotp.png" height="500"> |
 
 ## Capturas
