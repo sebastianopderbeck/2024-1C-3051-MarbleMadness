@@ -18,15 +18,14 @@ namespace TGC.MonoGame.TP{
         public Ball(ContentManager Content){
             BallModel = Content.Load<Model>(ContentFolder3D + "sphere/sphere");
 
-            BallWorld = Matrix.Identity;
+            BallWorld = Matrix.Identity * Matrix.CreateScale(.03f);
         }
 
         public void Update(GameTime gameTime){
-            BallWorld = Matrix.CreateScale(.1f);
+            
         }
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
-
             BallModel.Draw(BallWorld, view, projection);
         }
     }
