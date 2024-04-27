@@ -7,7 +7,7 @@ using TGC.MonoGame.TP;
 namespace TGC.MonoGame.TP
 {
     
-    public class Camera
+    public class FreeCamera
     {
         private Vector3 cameraPosition;
         private Vector3 cameraFront;
@@ -22,7 +22,7 @@ namespace TGC.MonoGame.TP
         public Matrix ViewMatrix { get; private set; }
         public Matrix ProjectionMatrix { get; private set; }
 
-        public Camera(Vector3 position, GraphicsDevice graphicsDevice)
+        public FreeCamera(Vector3 position, GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
             cameraPosition = position;

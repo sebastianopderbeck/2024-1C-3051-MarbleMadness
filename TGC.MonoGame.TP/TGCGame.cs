@@ -50,7 +50,7 @@ namespace TGC.MonoGame.TP
         
         private Ball Ball{ get; set; }
         private Nivel1 Nivel1 { get; set; }
-        private Camera Camera { get; set;}
+        private FreeCamera FreeCamera { get; set;}
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -108,7 +108,7 @@ namespace TGC.MonoGame.TP
 
             Ball = new Ball(Content);
             Nivel1 = new Nivel1(Content);
-            Camera = new Camera(new Vector3(0, 0, 5), GraphicsDevice);
+            FreeCamera = new FreeCamera(new Vector3(0, 0, 5), GraphicsDevice);
             base.LoadContent();
         }
 
@@ -134,7 +134,7 @@ namespace TGC.MonoGame.TP
             World = Matrix.CreateScale(0.3f) * Matrix.CreateRotationY(Rotation);
             
             Ball.Update(gameTime);
-            Camera.Update(gameTime);
+            FreeCamera.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -157,8 +157,8 @@ namespace TGC.MonoGame.TP
                 Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * World);
                 mesh.Draw();
             }*/
-            Ball.Draw(gameTime, Camera.ViewMatrix, Projection);
-            Nivel1.Draw(gameTime, Camera.ViewMatrix, Projection);
+            Ball.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            Nivel1.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
 
             //Ball.Draw(gameTime, View, Projection);
         }
