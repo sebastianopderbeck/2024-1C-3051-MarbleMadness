@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.MonoGame.TP;
+using TGC.MonoGame.niveles;
 
 namespace TGC.MonoGame.TP
 {
@@ -50,7 +51,8 @@ namespace TGC.MonoGame.TP
         
         private Ball Ball{ get; set; }
         private Nivel1 Nivel1 { get; set; }
-        private FreeCamera FreeCamera { get; set;}
+        private FreeCamera FreeCamera { get; set; }
+        private Checkpoint Checkpoint{ get; set; }
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -75,6 +77,7 @@ namespace TGC.MonoGame.TP
             Projection =
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
 
+            Nivel1 = new Nivel1();
             base.Initialize();
         }
 
@@ -107,7 +110,8 @@ namespace TGC.MonoGame.TP
             }
 
             Ball = new Ball(Content);
-            Nivel1 = new Nivel1(Content);
+            Nivel1.LoadContent(Content);
+            Checkpoint = new Checkpoint(Content);
             FreeCamera = new FreeCamera(new Vector3(0, 0, 5), GraphicsDevice);
             base.LoadContent();
         }
@@ -159,6 +163,7 @@ namespace TGC.MonoGame.TP
             }*/
             Ball.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
             Nivel1.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            Checkpoint.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
 
             //Ball.Draw(gameTime, View, Projection);
         }
