@@ -16,7 +16,7 @@ namespace TGC.MonoGame.TP{
         public Matrix BallWorld{get; set;}
 
         public Ball(Vector3 Position){
-            BallWorld = Matrix.CreateTranslation(Position) * Matrix.CreateScale(.024f);
+            BallWorld = Matrix.CreateScale(.024f) * Matrix.CreateTranslation(Position);
         }
 
         public void LoadContent(ContentManager Content){

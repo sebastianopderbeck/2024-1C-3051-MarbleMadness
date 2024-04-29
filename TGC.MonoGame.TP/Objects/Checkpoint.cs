@@ -16,10 +16,10 @@ namespace TGC.MonoGame.TP{
         }
 
         public void AgregoCheckpoint(Vector3 Position){
-            Matrix escala = Matrix.CreateScale(0.03f);
+            Matrix escala = Matrix.CreateScale(0.02f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
             var nuevoCheckpoint = new Matrix[]{
-                Matrix.CreateTranslation(Position) * escala,
+                escala * Matrix.CreateTranslation(Position),
             };
             CheckpointWorlds = CheckpointWorlds.Concat(nuevoCheckpoint).ToArray();
         }

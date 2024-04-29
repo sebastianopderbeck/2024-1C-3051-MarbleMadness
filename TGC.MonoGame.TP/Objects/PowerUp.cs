@@ -16,10 +16,10 @@ namespace TGC.MonoGame.TP{
         }
 
         public void agregarPowerUp(Vector3 Position){
-            Matrix escala = Matrix.CreateScale(0.03f);
+            Matrix escala = Matrix.CreateScale(0.008f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
             var nuevoPulpito = new Matrix[]{
-                Matrix.CreateTranslation(Position) * escala,
+                escala * Matrix.CreateTranslation(Position),
             };
             PowerUpsWorlds = PowerUpsWorlds.Concat(nuevoPulpito).ToArray();
         }

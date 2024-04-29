@@ -19,7 +19,7 @@ namespace TGC.MonoGame.TP{
             Matrix escala = Matrix.CreateScale(0.03f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
             var nuevoCartel = new Matrix[]{
-                Matrix.CreateTranslation(Position) * escala,
+                escala * Matrix.CreateTranslation(Position),
             };
             CartelpointWorlds = CartelpointWorlds.Concat(nuevoCartel).ToArray();
         }

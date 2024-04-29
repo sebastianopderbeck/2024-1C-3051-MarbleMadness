@@ -17,10 +17,10 @@ namespace TGC.MonoGame.TP{
         }
 
         public void agregarOvni(Vector3 Position){
-            Matrix escala = Matrix.CreateScale(0.03f);
+            Matrix escala = Matrix.CreateScale(0.055f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
             var nuevoOvni = new Matrix[]{
-                Matrix.CreateTranslation(Position) * escala,
+                escala * Matrix.CreateTranslation(Position),
             };
             OvniWorlds = OvniWorlds.Concat(nuevoOvni).ToArray();
         }
