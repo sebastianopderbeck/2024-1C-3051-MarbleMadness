@@ -49,10 +49,10 @@ namespace TGC.MonoGame.TP
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
         
-        private Ball Ball{ get; set; }
+        //private Ball Ball{ get; set; }
         private Nivel1 Nivel1 { get; set; }
         private FreeCamera FreeCamera { get; set; }
-        private Checkpoint Checkpoint{ get; set; }
+        //private Checkpoint Checkpoint{ get; set; }
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -109,9 +109,9 @@ namespace TGC.MonoGame.TP
                 }
             }
 
-            Ball = new Ball(Content);
+            //Ball = new Ball(Content);
             Nivel1.LoadContent(Content);
-            Checkpoint = new Checkpoint(Content);
+            //Checkpoint = new Checkpoint(Content);
             FreeCamera = new FreeCamera(new Vector3(0, 0, 5), GraphicsDevice);
             base.LoadContent();
         }
@@ -137,7 +137,7 @@ namespace TGC.MonoGame.TP
 
             World = Matrix.CreateScale(0.3f) * Matrix.CreateRotationY(Rotation);
             
-            Ball.Update(gameTime);
+            //Ball.Update(gameTime);
             FreeCamera.Update(gameTime);
             base.Update(gameTime);
         }
@@ -161,9 +161,9 @@ namespace TGC.MonoGame.TP
                 Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * World);
                 mesh.Draw();
             }*/
-            Ball.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Ball.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
             Nivel1.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
-            Checkpoint.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Checkpoint.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
 
             //Ball.Draw(gameTime, View, Projection);
         }

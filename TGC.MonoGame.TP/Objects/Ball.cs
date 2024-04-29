@@ -9,16 +9,18 @@ using System.Text;
 
 namespace TGC.MonoGame.TP{
     
-    class Ball{
+    public class Ball{
 
         public const string ContentFolder3D = "Models/";
         public Model BallModel{get; set;}
         public Matrix BallWorld{get; set;}
 
-        public Ball(ContentManager Content){
-            BallModel = Content.Load<Model>(ContentFolder3D + "sphere/sphere");
+        public Ball(Vector3 Position){
+            BallWorld = Matrix.CreateTranslation(Position) * Matrix.CreateScale(.024f);
+        }
 
-            BallWorld = Matrix.Identity * Matrix.CreateScale(.03f);
+        public void LoadContent(ContentManager Content){
+            BallModel = Content.Load<Model>(ContentFolder3D + "sphere/sphere");
         }
 
         public void Update(GameTime gameTime){
