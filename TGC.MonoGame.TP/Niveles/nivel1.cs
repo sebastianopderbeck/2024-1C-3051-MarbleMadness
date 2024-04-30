@@ -11,6 +11,7 @@ namespace TGC.MonoGame.niveles{
     public class Nivel1{
 
         public const string ContentFolder3D = "Models/";
+        public const string ContentFolderEffects = "Effects/";
         public Model PisoModel { get; set; }
         public Matrix[] PisoWorlds { get; set; }
         public Model ParedModel { get; set; }
@@ -21,6 +22,7 @@ namespace TGC.MonoGame.niveles{
         public Pulpito Pulpito { get; set; }
         public Cartel Carteles { get; set; }
         public PowerUps PowerUps{ get; set; }
+        public Effect Effect { get; set; }
 
         public const float DistanceBetweenFloor = 12.33f;
         public const float DistanceBetweenWall = 18f;
@@ -38,7 +40,7 @@ namespace TGC.MonoGame.niveles{
         public Nivel1() {
 
             Ovnis = new Ovni();
-            Bola = new Ball(new (0f,200f,0f));
+            Bola = new Ball(new (0f,4f,0f));
             Pulpito = new Pulpito();
             Checkpoint = new Checkpoint();
             Carteles = new Cartel();
@@ -125,18 +127,27 @@ namespace TGC.MonoGame.niveles{
                     * Matrix.CreateTranslation(Vector3.Left * 6f  + alturaPisoPared),
                 //Pared Derecha  
             };
-            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 2 + alturaEscalera * 3);
-            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 7 + alturaEscalera * 3);
-            Pulpito.agregarPulpito((Vector3.Forward + Vector3.Left) * DistanceBetweenFloor);
+            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 2 + alturaEscalera * 3 + Vector3.Up * 2);
+            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 7 + alturaEscalera * 3 + Vector3.Up * 2);
+            Pulpito.agregarPulpito((Vector3.Forward + Vector3.Left) * DistanceBetweenFloor + Vector3.Up * 3);
             Checkpoint.AgregoCheckpoint(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 10 + alturaEscalera * 3);
             Carteles.AgregarCartel(Vector3.Forward * DistanceBetweenFloor * 3 + Vector3.Left * DistanceBetweenFloor / 2 + arriba * 2);
             Carteles.AgregarCartel(Vector3.Forward * (DistanceBetweenFloor * 6.25f + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 4 + alturaEscalera * 3 + arriba * 2);
-            PowerUps.agregarPowerUp(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 3 + alturaEscalera * 3);
+            PowerUps.agregarPowerUp(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 3 + alturaEscalera * 3 + Vector3.Up * 3);
         }
 
         public void LoadContent(ContentManager Content){
             PisoModel = Content.Load<Model>(ContentFolder3D + "shared/Ceiling");
             ParedModel = Content.Load<Model>(ContentFolder3D + "shared/Wall");
+            Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
+
+            foreach (var mesh in PisoModel.Meshes)
+            {
+                foreach (var meshPart in mesh.MeshParts)
+                {
+                    meshPart.Effect = Effect;
+                }
+            }
             Bola.LoadContent(Content);
             Checkpoint.LoadContent(Content);
             Ovnis.LoadContent(Content);
@@ -148,9 +159,18 @@ namespace TGC.MonoGame.niveles{
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
 
             //PisoModel.Draw(PisoWorlds, view, projection);
-            for(int i=0; i < PisoWorlds.Length; i++){
-                Matrix _pisoWorld = PisoWorlds[i];
-                PisoModel.Draw(_pisoWorld, view, projection);
+            Effect.Parameters["View"].SetValue(view);
+            Effect.Parameters["Projection"].SetValue(projection);
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Violet.ToVector3());
+            foreach (var mesh in PisoModel.Meshes)
+            {
+                
+                for(int i=0; i < PisoWorlds.Length; i++){
+                    Matrix _pisoWorld = PisoWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _pisoWorld);
+                    mesh.Draw();
+                }
+                
             }
 
             for(int i=0; i < ParedWorlds.Length; i++){

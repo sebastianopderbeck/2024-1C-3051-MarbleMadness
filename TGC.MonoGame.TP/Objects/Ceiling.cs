@@ -13,8 +13,10 @@ namespace TGC.MonoGame.TP.Objects
     {
 
         public const string ContentFolder3D = "Models/";
+        public const string ContentFolderEffects = "Effects/";
         public Model CeilingModel { get; set; }
         public Matrix[] CeilingWorlds { get; set; }
+        public Effect Effect { get; set; }
         public Ceiling() {
             CeilingWorlds = new Matrix[] { };
         }
@@ -30,12 +32,30 @@ namespace TGC.MonoGame.TP.Objects
 
         public void LoadContent(ContentManager Content) {
             CeilingModel = Content.Load<Model>(ContentFolder3D + "shared/ceiling");
+            Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
+
+            foreach (var mesh in CeilingModel.Meshes)
+            {
+                foreach (var meshPart in mesh.MeshParts)
+                {
+                    meshPart.Effect = Effect;
+                }
+            }
         }
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection) {
-            for (int i = 0; i < CeilingWorlds.Length; i++) {
-                Matrix _ceilingWorld = CeilingWorlds[i];
-                CeilingModel.Draw(_ceilingWorld, view, projection);
+            Effect.Parameters["View"].SetValue(view); //Cambio View por Eso
+            Effect.Parameters["Projection"].SetValue(projection);
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Green.ToVector3());
+            foreach (var mesh in CeilingModel.Meshes)
+            {
+                
+                for(int i=0; i < CeilingWorlds.Length; i++){
+                    Matrix _ceilingWorld = CeilingWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _ceilingWorld);
+                    mesh.Draw();
+                }
+                
             }
         }
     }

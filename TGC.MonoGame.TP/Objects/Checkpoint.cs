@@ -8,9 +8,11 @@ namespace TGC.MonoGame.TP{
     public class Checkpoint{
 
         public const string ContentFolder3D = "Models/";
+        public const string ContentFolderEffects = "Effects/";
         public Model CheckpointModel{get; set;}
         public Matrix[] CheckpointWorlds{get; set;}
-        //falta hacer el constructor checkpoint
+        public Effect Effect { get; set; }
+
         public Checkpoint(){
             CheckpointWorlds = new Matrix[]{};
         }
@@ -26,12 +28,30 @@ namespace TGC.MonoGame.TP{
 
         public void LoadContent(ContentManager Content){
             CheckpointModel = Content.Load<Model>(ContentFolder3D + "shared/Checkpoint");
+            Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
+
+            foreach (var mesh in CheckpointModel.Meshes)
+            {
+                foreach (var meshPart in mesh.MeshParts)
+                {
+                    meshPart.Effect = Effect;
+                }
+            }
         }
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
-            for(int i = 0 ; i < CheckpointWorlds.Length; i++){
-                Matrix _checkpointWorld = CheckpointWorlds[i];
-                CheckpointModel.Draw(_checkpointWorld, view, projection);
+            Effect.Parameters["View"].SetValue(view);
+            Effect.Parameters["Projection"].SetValue(projection);
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Green.ToVector3());
+            foreach (var mesh in CheckpointModel.Meshes)
+            {
+                
+                for(int i=0; i < CheckpointWorlds.Length; i++){
+                    Matrix _checkpointWorld = CheckpointWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _checkpointWorld);
+                    mesh.Draw();
+                }
+                
             }
         }
     }
