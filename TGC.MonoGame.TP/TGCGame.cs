@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Net.Http.Headers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TGC.MonoGame.TP;
+using TGC.MonoGame.niveles;
 
 namespace TGC.MonoGame.TP
 {
@@ -45,6 +48,16 @@ namespace TGC.MonoGame.TP
         private Matrix World { get; set; }
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
+        
+        //private Ball Ball{ get; set; }
+        private Nivel1 Nivel1 { get; set; }
+        private Nivel2 Nivel2 { get; set; }
+        private Nivel3 Nivel3 { get; set; }
+        private Nivel4 Nivel4 { get; set; }
+        private Nivel5 Nivel5 { get; set; }
+        private NivelFinal NivelFinal { get; set; }
+        private FreeCamera FreeCamera { get; set; }
+        //private Checkpoint Checkpoint{ get; set; }
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -64,10 +77,17 @@ namespace TGC.MonoGame.TP
 
             // Configuramos nuestras matrices de la escena.
             World = Matrix.Identity;
+            
             View = Matrix.CreateLookAt(Vector3.UnitZ * 150, Vector3.Zero, Vector3.Up);
             Projection =
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
 
+            Nivel1 = new Nivel1();
+            Nivel2 = new Nivel2();
+            //Nivel3 = new Nivel3();
+            //Nivel4 = new Nivel4();
+            //Nivel5 = new Nivel5();
+            //NivelFinal = new NivelFinal();
             base.Initialize();
         }
 
@@ -99,6 +119,15 @@ namespace TGC.MonoGame.TP
                 }
             }
 
+            //Ball = new Ball(Content);
+            Nivel1.LoadContent(Content);
+            Nivel2.LoadContent(Content);
+            //Nivel3.LoadContent(Content);
+            //Nivel4.LoadContent(Content);
+            //Nivel5.LoadContent(Content);
+            //NivelFinal.LoadContent(Content);
+            //Checkpoint = new Checkpoint(Content);
+            FreeCamera = new FreeCamera(new Vector3(0, 0, 5), GraphicsDevice);
             base.LoadContent();
         }
 
@@ -121,8 +150,10 @@ namespace TGC.MonoGame.TP
             // Basado en el tiempo que paso se va generando una rotacion.
             Rotation += Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
 
-            World = Matrix.CreateRotationY(Rotation);
-
+            World = Matrix.CreateScale(0.3f) * Matrix.CreateRotationY(Rotation);
+            
+            //Ball.Update(gameTime);
+            FreeCamera.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -133,18 +164,28 @@ namespace TGC.MonoGame.TP
         protected override void Draw(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logia de renderizado del juego.
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.
-            Effect.Parameters["View"].SetValue(View);
+            //Para dibujar le modelo necesitamos pasarle informacion que el efecto esta esperando.
+            /*Effect.Parameters["View"].SetValue(Camera.ViewMatrix); //Cambio View por Eso
             Effect.Parameters["Projection"].SetValue(Projection);
-            Effect.Parameters["DiffuseColor"].SetValue(Color.DarkBlue.ToVector3());
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Blue.ToVector3());
 
             foreach (var mesh in Model.Meshes)
             {
                 Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * World);
                 mesh.Draw();
-            }
+            }*/
+            //Ball.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            Nivel1.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            Nivel2.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Nivel3.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Nivel4.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Nivel5.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //NivelFinal.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Checkpoint.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+
+            //Ball.Draw(gameTime, View, Projection);
         }
 
         /// <summary>
