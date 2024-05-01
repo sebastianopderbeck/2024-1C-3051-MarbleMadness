@@ -51,6 +51,11 @@ namespace TGC.MonoGame.TP
         
         //private Ball Ball{ get; set; }
         private Nivel1 Nivel1 { get; set; }
+        private Nivel2 Nivel2 { get; set; }
+        private Nivel3 Nivel3 { get; set; }
+        private Nivel4 Nivel4 { get; set; }
+        private Nivel5 Nivel5 { get; set; }
+        private NivelFinal NivelFinal { get; set; }
         private FreeCamera FreeCamera { get; set; }
         //private Checkpoint Checkpoint{ get; set; }
 
@@ -78,6 +83,11 @@ namespace TGC.MonoGame.TP
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
 
             Nivel1 = new Nivel1();
+            Nivel2 = new Nivel2();
+            //Nivel3 = new Nivel3();
+            //Nivel4 = new Nivel4();
+            //Nivel5 = new Nivel5();
+            //NivelFinal = new NivelFinal();
             base.Initialize();
         }
 
@@ -111,6 +121,11 @@ namespace TGC.MonoGame.TP
 
             //Ball = new Ball(Content);
             Nivel1.LoadContent(Content);
+            Nivel2.LoadContent(Content);
+            //Nivel3.LoadContent(Content);
+            //Nivel4.LoadContent(Content);
+            //Nivel5.LoadContent(Content);
+            //NivelFinal.LoadContent(Content);
             //Checkpoint = new Checkpoint(Content);
             FreeCamera = new FreeCamera(new Vector3(0, 0, 5), GraphicsDevice);
             base.LoadContent();
@@ -163,6 +178,11 @@ namespace TGC.MonoGame.TP
             }*/
             //Ball.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
             Nivel1.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            Nivel2.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Nivel3.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Nivel4.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Nivel5.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //NivelFinal.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
             //Checkpoint.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
 
             //Ball.Draw(gameTime, View, Projection);

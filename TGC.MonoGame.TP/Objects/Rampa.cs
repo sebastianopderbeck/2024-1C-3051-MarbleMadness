@@ -49,7 +49,7 @@ namespace TGC.MonoGame.TP.Objects
         {
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
-            Effect.Parameters["DiffuseColor"].SetValue(Color.Pink.ToVector3());
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Yellow.ToVector3());
             foreach (var mesh in RampaModel.Meshes)
             {
                 

@@ -5,32 +5,32 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TGC.MonoGame.TP{
 
-    public class Plank{
+    public class TierraLuminosa{
 
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
-        public Model PlankModel{get; set;}
-        public Matrix[] PlankWorlds{get; set;}
+        public Model TierraLuminosaModel{get; set;}
+        public Matrix[] TierraLuminosaWorlds{get; set;}
         public Effect Effect { get; set; }
 
-        public Plank(){            
-            PlankWorlds = new Matrix[]{};
+        public TierraLuminosa(){            
+            TierraLuminosaWorlds = new Matrix[]{};
         }
 
-        public void AgregarPlank(Vector3 Position){
+        public void agregarTierraLuminosa(Vector3 Position){
             Matrix escala = Matrix.CreateScale(0.01f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
-            var nuevoPlank = new Matrix[]{
+            var nuevaTierraLuminosa = new Matrix[]{
                 escala * Matrix.CreateTranslation(Position),
             };
-            PlankWorlds = PlankWorlds.Concat(nuevoPlank).ToArray();
+            TierraLuminosaWorlds = TierraLuminosaWorlds.Concat(nuevaTierraLuminosa).ToArray();
         }
 
         public void LoadContent(ContentManager Content){
-            PlankModel = Content.Load<Model>(ContentFolder3D + "shared/thin");
+            TierraLuminosaModel = Content.Load<Model>(ContentFolder3D + "shared/Octopus"); //falta agregarlo a la carpeta de contents
             Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
 
-            foreach (var mesh in PlankModel.Meshes)
+            foreach (var mesh in TierraLuminosaModel.Meshes)
             {
                 foreach (var meshPart in mesh.MeshParts)
                 {
@@ -42,13 +42,13 @@ namespace TGC.MonoGame.TP{
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
-            Effect.Parameters["DiffuseColor"].SetValue(Color.Yellow.ToVector3());
-            foreach (var mesh in PlankModel.Meshes)
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Pink.ToVector3());
+            foreach (var mesh in TierraLuminosaModel.Meshes)
             {
                 
-                for(int i=0; i < PlankWorlds.Length; i++){
-                    Matrix _plankWorld = PlankWorlds[i];
-                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _plankWorld);
+                for(int i=0; i < TierraLuminosaWorlds.Length; i++){
+                    Matrix _tierraWorld = TierraLuminosaWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _tierraWorld);
                     mesh.Draw();
                 }
                 

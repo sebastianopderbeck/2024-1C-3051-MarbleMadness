@@ -22,6 +22,7 @@ namespace TGC.MonoGame.niveles{
         public Pulpito Pulpito { get; set; }
         public Cartel Carteles { get; set; }
         public PowerUps PowerUps{ get; set; }
+        public TierraLuminosa Tierras { get; set; }
         public Effect Effect { get; set; }
 
         public const float DistanceBetweenFloor = 12.33f;
@@ -148,6 +149,13 @@ namespace TGC.MonoGame.niveles{
                     meshPart.Effect = Effect;
                 }
             }
+            foreach (var mesh in ParedModel.Meshes)
+            {
+                foreach (var meshPart in mesh.MeshParts)
+                {
+                    meshPart.Effect = Effect;
+                }
+            }
             Bola.LoadContent(Content);
             Checkpoint.LoadContent(Content);
             Ovnis.LoadContent(Content);
@@ -172,10 +180,15 @@ namespace TGC.MonoGame.niveles{
                 }
                 
             }
-
-            for(int i=0; i < ParedWorlds.Length; i++){
-                Matrix _paredWorld = ParedWorlds[i];
-                ParedModel.Draw(_paredWorld, view, projection);
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Purple.ToVector3());
+            foreach (var mesh in ParedModel.Meshes)
+            {
+                
+                for(int i=0; i < ParedWorlds.Length; i++){
+                    Matrix _pisoWorld = ParedWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _pisoWorld);
+                    mesh.Draw();
+                }
                 
             }
 

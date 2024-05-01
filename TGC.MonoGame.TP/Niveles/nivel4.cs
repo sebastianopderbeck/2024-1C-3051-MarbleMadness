@@ -9,6 +9,7 @@ namespace TGC.MonoGame.niveles
 
     public class Nivel4 {
         public const string ContentFolder3D = "Models/";
+        public const string ContentFolderEffects = "Effects/";
 
         public Matrix[] InicioWorlds { get; set; }
 
@@ -27,8 +28,8 @@ namespace TGC.MonoGame.niveles
         public Pulpito Pulpito { get; set; }
         public Cartel Carteles { get; set; }
         public PowerUps PowerUps { get; set; }
-
         public Ceiling Ceiling {  get; set; }
+        public Effect Effect { get; set; }
 
         public const float DistanceBetweenFloor = 12.33f;
         public const float DistanceBetweenWall = 18f;
@@ -118,7 +119,22 @@ namespace TGC.MonoGame.niveles
         {
             InicioModel = Content.Load<Model>(ContentFolder3D + "shared/Ceiling");
             Camino1Model = Content.Load<Model>(ContentFolder3D + "shared/Ceiling");
-            //ParedModel = Content.Load<Model>(ContentFolder3D + "shared/Wall");
+            Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
+
+            foreach (var mesh in InicioModel.Meshes)
+            {
+                foreach (var meshPart in mesh.MeshParts)
+                {
+                    meshPart.Effect = Effect;
+                }
+            }
+            foreach (var mesh in Camino1Model.Meshes)
+            {
+                foreach (var meshPart in mesh.MeshParts)
+                {
+                    meshPart.Effect = Effect;
+                }
+            }
 
             Bola.LoadContent(Content);
             Checkpoint.LoadContent(Content);
@@ -131,17 +147,29 @@ namespace TGC.MonoGame.niveles
         public void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
 
-            //PisoModel.Draw(PisoWorlds, view, projection);
-            for (int i = 0; i < InicioWorlds.Length; i++)
+            Effect.Parameters["View"].SetValue(view);
+            Effect.Parameters["Projection"].SetValue(projection);
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Gray.ToVector3());
+            foreach (var mesh in InicioModel.Meshes)
             {
-                Matrix _incioWorld = InicioWorlds[i];
-                InicioModel.Draw(_incioWorld, view, projection);
+                
+                for(int i=0; i < InicioWorlds.Length; i++){
+                    Matrix _inicioWorld = InicioWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _inicioWorld);
+                    mesh.Draw();
+                }
+                
             }
-
-            for (int i = 0; i < Camino1Worlds.Length; i++)
+            Effect.Parameters["DiffuseColor"].SetValue(Color.LightGray.ToVector3());
+            foreach (var mesh in Camino1Model.Meshes)
             {
-                Matrix _incioWorld = Camino1Worlds[i];
-                Camino1Model.Draw(_incioWorld, view, projection);
+                
+                for(int i=0; i < Camino1Worlds.Length; i++){
+                    Matrix _camino1World = Camino1Worlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _camino1World);
+                    mesh.Draw();
+                }
+                
             }
 
         }
