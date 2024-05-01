@@ -18,6 +18,9 @@ namespace TGC.MonoGame.niveles{
         public Matrix[] ParedWorlds { get; set; }
         public Ball Bola { get; set; }
         public Checkpoint Checkpoint { get; set; }
+        public Cardboard Cardboard { get; set; }
+        public NaveSW NaveSW { get; set; }
+        public WarpGate WarpGate { get; set; }
         public Ovni Ovnis { get; set; }
         public Pulpito Pulpito { get; set; }
         public Cartel Carteles { get; set; }
@@ -44,6 +47,9 @@ namespace TGC.MonoGame.niveles{
             Bola = new Ball(new (0f,4f,0f));
             Pulpito = new Pulpito();
             Checkpoint = new Checkpoint();
+            Cardboard = new Cardboard();
+            NaveSW = new NaveSW();
+            WarpGate = new WarpGate();
             Carteles = new Cartel();
             PowerUps = new PowerUps();
 
@@ -132,6 +138,9 @@ namespace TGC.MonoGame.niveles{
             Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 7 + alturaEscalera * 3 + Vector3.Up * 2);
             Pulpito.agregarPulpito((Vector3.Forward + Vector3.Left) * DistanceBetweenFloor + Vector3.Up * 3);
             Checkpoint.AgregoCheckpoint(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 10 + alturaEscalera * 3);
+            Cardboard.AgregarCardboard(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 4) + Vector3.Left * DistanceBetweenFloor * 11 + alturaEscalera * 4);
+            NaveSW.AgregarNaveSW(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 4) + Vector3.Left * DistanceBetweenFloor * 13 + alturaEscalera * 5);
+            WarpGate.AgregarWarpGate(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 4) + Vector3.Left * DistanceBetweenFloor * 14 + alturaEscalera * 6);
             Carteles.AgregarCartel(Vector3.Forward * DistanceBetweenFloor * 3 + Vector3.Left * DistanceBetweenFloor / 2 + arriba * 2);
             Carteles.AgregarCartel(Vector3.Forward * (DistanceBetweenFloor * 6.25f + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 4 + alturaEscalera * 3 + arriba * 2);
             PowerUps.agregarPowerUp(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 3 + alturaEscalera * 3 + Vector3.Up * 3);
@@ -158,6 +167,9 @@ namespace TGC.MonoGame.niveles{
             }
             Bola.LoadContent(Content);
             Checkpoint.LoadContent(Content);
+            Cardboard.LoadContent(Content);
+            NaveSW.LoadContent(Content);
+            WarpGate.LoadContent(Content);
             Ovnis.LoadContent(Content);
             Pulpito.LoadContent(Content);
             Carteles.LoadContent(Content);
@@ -194,6 +206,9 @@ namespace TGC.MonoGame.niveles{
 
             Bola.Draw(gameTime, view, projection);
             Checkpoint.Draw(gameTime, view, projection);
+            Cardboard.Draw(gameTime, view, projection);
+            NaveSW.Draw(gameTime, view, projection);
+            WarpGate.Draw(gameTime, view, projection);
             Ovnis.Draw(gameTime, view, projection);
             Pulpito.Draw(gameTime, view, projection);
             Carteles.Draw(gameTime, view, projection);
