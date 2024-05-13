@@ -17,7 +17,6 @@ namespace TGC.MonoGame.niveles{
         public Matrix[] PisoWorlds { get; set; }
         public Model ParedModel { get; set; }
         public Matrix[] ParedWorlds { get; set; }
-        public Ball Bola { get; set; }
         public Checkpoint Checkpoint { get; set; }
         public Ovni Ovnis { get; set; }
         public Pulpito Pulpito { get; set; }
@@ -48,7 +47,6 @@ namespace TGC.MonoGame.niveles{
         public Nivel3() {
 
             Ovnis = new Ovni();
-            Bola = new Ball(new (0f,3f,0f));
             Pulpito = new Pulpito();
             Checkpoint = new Checkpoint();
             Carteles = new Cartel();
@@ -218,7 +216,6 @@ namespace TGC.MonoGame.niveles{
                     meshPart.Effect = Effect;
                 }
             }
-            Bola.LoadContent(Content);
             Checkpoint.LoadContent(Content);
             Ovnis.LoadContent(Content);
             Pulpito.LoadContent(Content);
@@ -260,7 +257,6 @@ namespace TGC.MonoGame.niveles{
                 
             }
 
-            Bola.Draw(gameTime, view, projection);
             Checkpoint.Draw(gameTime, view, projection);
             Ovnis.Draw(gameTime, view, projection);
             Pulpito.Draw(gameTime, view, projection);

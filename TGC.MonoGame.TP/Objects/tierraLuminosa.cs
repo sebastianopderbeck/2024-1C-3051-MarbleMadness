@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -12,9 +13,17 @@ namespace TGC.MonoGame.TP{
         public Model TierraLuminosaModel{get; set;}
         public Matrix[] TierraLuminosaWorlds{get; set;}
         public Effect Effect { get; set; }
+        //private float ModelRotation { get; set; }
+
+        private float _rotation;
+        //private Vector3 _rotationAxis;
+        private float _rotationSpeed;
+
 
         public TierraLuminosa(){            
             TierraLuminosaWorlds = new Matrix[]{};
+            _rotation = 0f;
+            _rotationSpeed = 0.01f;
         }
 
         public void agregarTierraLuminosa(Vector3 Position){
@@ -39,6 +48,16 @@ namespace TGC.MonoGame.TP{
             }
         }
 
+        public void Update(GameTime gameTime, int index){
+
+        // Actualizar el ángulo de rotación
+            //_rotation += _rotationSpeed;
+            
+            _rotation += Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+        // Crear la matriz de mundo para el modelo
+            TierraLuminosaWorlds[index] = Matrix.CreateRotationY(_rotation);
+        }
+
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
@@ -53,6 +72,7 @@ namespace TGC.MonoGame.TP{
                 }
                 
             }
+            
         }
     }
 }

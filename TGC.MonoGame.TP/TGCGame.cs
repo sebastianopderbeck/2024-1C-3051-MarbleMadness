@@ -50,13 +50,16 @@ namespace TGC.MonoGame.TP
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
         
-        //private Ball Ball{ get; set; }
+        private Ball Ball{ get; set; }
         private Nivel1 Nivel1 { get; set; }
         private NivelParte2 NivelSegundaParte { get; set; }
         private Nivel2 Nivel2 { get; set; }
         private Nivel3 Nivel3 { get; set; }
         private NivelFinal NivelFinal { get; set; }
-        private FreeCamera FreeCamera { get; set; }
+        private FollowCamera Camera { get; set; }
+        private Skybox Skybox { get; set; }
+        float distance = 20;
+        Vector3 cameraPosition;
         //private Checkpoint Checkpoint{ get; set; }
 
         /// <summary>
@@ -82,12 +85,15 @@ namespace TGC.MonoGame.TP
             Projection =
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
 
-            //Nivel1 = new Nivel1();
-            //NivelSegundaParte = new NivelParte2(); //segunda parte del nivel uno
+            Camera = new FollowCamera(GraphicsDevice, new Vector3(0, 5, 15), Vector3.Zero, Vector3.Up);
+            Ball = new Ball(new (0f,4f,0f));
+
+            Nivel1 = new Nivel1();
+            NivelSegundaParte = new NivelParte2(); //segunda parte del nivel uno
 
             //Nivel2 = new Nivel2();
 
-            Nivel3 = new Nivel3();
+            //Nivel3 = new Nivel3();
             
             //NivelFinal = new NivelFinal();
             base.Initialize();
@@ -122,17 +128,19 @@ namespace TGC.MonoGame.TP
             }
 
 
-            //Nivel1.LoadContent(Content);
-            //NivelSegundaParte.LoadContent(Content);
+            Nivel1.LoadContent(Content);
+            NivelSegundaParte.LoadContent(Content);
 
             //Nivel2.LoadContent(Content);
 
-            Nivel3.LoadContent(Content);
+            //Nivel3.LoadContent(Content);
 
             //NivelFinal.LoadContent(Content);
             
 
-            FreeCamera = new FreeCamera(new Vector3(0, 0, 5), GraphicsDevice);
+            Ball.LoadContent(Content);
+            Skybox = new Skybox(ContentFolderTextures + "Skybox/SkyBox", Content);
+
             base.LoadContent();
         }
 
@@ -144,6 +152,8 @@ namespace TGC.MonoGame.TP
         protected override void Update(GameTime gameTime)
         {
             // Aca deberiamos poner toda la logica de actualizacion del juego.
+            var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
 
             // Capturar Input teclado
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -157,8 +167,11 @@ namespace TGC.MonoGame.TP
 
             World = Matrix.CreateScale(0.3f) * Matrix.CreateRotationY(Rotation);
             
-            //Ball.Update(gameTime);
-            FreeCamera.Update(gameTime);
+            Ball.Update(gameTime);
+
+            Camera.Update(Ball.PosicionBola);
+            Nivel1.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -182,16 +195,23 @@ namespace TGC.MonoGame.TP
                 mesh.Draw();
             }*/
             
+            Ball.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
+            Nivel1.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
+            NivelSegundaParte.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
 
-            //Nivel1.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
-            //NivelSegundaParte.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Nivel2.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
 
-            //Nivel2.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
-
-            Nivel3.Draw(gameTime, FreeCamera.ViewMatrix, Projection);
+            //Nivel3.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
             
 
-            //Ball.Draw(gameTime, View, Projection);
+            var originalRasterizerState = GraphicsDevice.RasterizerState;
+            var rasterizerState = new RasterizerState();
+            rasterizerState.CullMode = CullMode.None;
+            Graphics.GraphicsDevice.RasterizerState = rasterizerState;
+
+            Skybox.Draw(Camera.ViewMatrix, Camera.ProjectionMatrix, Ball.PosicionBola);
+
+            GraphicsDevice.RasterizerState = originalRasterizerState;
         }
 
         /// <summary>

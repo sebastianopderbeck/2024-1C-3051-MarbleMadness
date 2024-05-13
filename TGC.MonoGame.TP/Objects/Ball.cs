@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,15 @@ namespace TGC.MonoGame.TP{
         public Matrix BallWorld{get; set;}
         public Effect Effect { get; set; }
 
-        public Ball(Vector3 Position){
-            BallWorld = Matrix.CreateScale(.024f) * Matrix.CreateTranslation(Position);
+        public float EscalaBola { get; set; } = 0.024f;
+        public Vector3 PosicionBola { get; set; } = Vector3.Zero;
+        public Matrix RotacionBola { get; set; } = Matrix.Identity;
+        public Vector3 VelocidadBola { get; set; } = Vector3.Zero;
+        public Vector3 AceleracionBola { get; set; } = Vector3.Zero;
+        public Vector3 DireccionBola { get; set; }
+
+        public Ball(Vector3 posicionInicial){
+            BallWorld = Matrix.Identity * Matrix.CreateScale(EscalaBola) * Matrix.CreateTranslation(posicionInicial);
         }
 
         public void LoadContent(ContentManager Content){
@@ -34,6 +42,28 @@ namespace TGC.MonoGame.TP{
         }
 
         public void Update(GameTime gameTime){
+
+            var deltaTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+            var keyboardState = Keyboard.GetState();
+            AceleracionBola = Vector3.Zero;
+            Vector3 friccion = -VelocidadBola * 0.07f;
+
+
+            if (keyboardState.IsKeyDown(Keys.A))
+                AceleracionBola += Vector3.Left;
+            if (keyboardState.IsKeyDown(Keys.D))
+                AceleracionBola += Vector3.Right;
+            if (keyboardState.IsKeyDown(Keys.W))
+                AceleracionBola += Vector3.Forward;
+            if (keyboardState.IsKeyDown(Keys.S))
+                AceleracionBola += Vector3.Backward;
+            
+            AceleracionBola += friccion;
+            VelocidadBola += AceleracionBola * 180f * deltaTime;
+            PosicionBola += VelocidadBola * deltaTime;
+            
+
+            BallWorld = Matrix.CreateScale(EscalaBola) * Matrix.CreateTranslation(PosicionBola);
             
         }
 

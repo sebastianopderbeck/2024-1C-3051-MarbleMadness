@@ -16,7 +16,6 @@ namespace TGC.MonoGame.niveles{
         public Matrix[] PisoWorlds { get; set; }
         public Model ParedModel { get; set; }
         public Matrix[] ParedWorlds { get; set; }
-        public Ball Bola { get; set; }
         public Checkpoint Checkpoint { get; set; }
         public NaveSW NaveSW { get; set; }
         public Asteroide Asteroide { get; set; }
@@ -43,7 +42,6 @@ namespace TGC.MonoGame.niveles{
         public Nivel1() {
 
             Ovnis = new Ovni();
-            Bola = new Ball(new (0f,4f,0f));
             Pulpito = new Pulpito();
             Checkpoint = new Checkpoint(); 
             NaveSW = new NaveSW();
@@ -183,6 +181,7 @@ namespace TGC.MonoGame.niveles{
 
         }
 
+
         public void LoadContent(ContentManager Content){
             PisoModel = Content.Load<Model>(ContentFolder3D + "shared/Ceiling");
             ParedModel = Content.Load<Model>(ContentFolder3D + "shared/Wall");
@@ -202,7 +201,6 @@ namespace TGC.MonoGame.niveles{
                     meshPart.Effect = Effect;
                 }
             }
-            Bola.LoadContent(Content);
             Checkpoint.LoadContent(Content);
             NaveSW.LoadContent(Content);
             Ovnis.LoadContent(Content);
@@ -213,6 +211,9 @@ namespace TGC.MonoGame.niveles{
             Asteroide.LoadContent(Content);
         }
 
+        public void Update(GameTime gameTime){
+            Tierras.Update(gameTime, 1);
+        }
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
 
             //PisoModel.Draw(PisoWorlds, view, projection);
@@ -241,7 +242,6 @@ namespace TGC.MonoGame.niveles{
                 
             }
 
-            Bola.Draw(gameTime, view, projection);
             Checkpoint.Draw(gameTime, view, projection);
             NaveSW.Draw(gameTime, view, projection);
             Ovnis.Draw(gameTime, view, projection);

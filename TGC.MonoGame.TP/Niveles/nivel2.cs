@@ -15,7 +15,6 @@ namespace TGC.MonoGame.niveles
         public Matrix[] Camino1Worlds { get; set; }
         public Model Camino1Model { get; set; }
         public Matrix[] FinalWorlds { get; set; }
-        public Ball Bola { get; set; }
         public Checkpoint Checkpoint { get; set; }
         public Ovni Ovni { get; set; }
         public Pulpito Pulpito { get; set; }
@@ -45,7 +44,6 @@ namespace TGC.MonoGame.niveles
 
         public Nivel2()
         {
-            Bola = new Ball(new(0f,3f,0f));
             Ovni = new Ovni();
             Pulpito = new Pulpito();
             PowerUpsStar = new PowerUpsStar();
@@ -155,7 +153,6 @@ namespace TGC.MonoGame.niveles
             }
 
             
-            Bola.LoadContent(Content);
             Ovni.LoadContent(Content);
             PowerUpsStar.LoadContent(Content);
             Pulpito.LoadContent(Content);
@@ -192,8 +189,6 @@ namespace TGC.MonoGame.niveles
                 }
                 
             }
-
-            Bola.Draw(gameTime, view, projection);
             Ovni.Draw(gameTime, view, projection);
             Pulpito.Draw(gameTime, view, projection);
             PowerUpsStar.Draw(gameTime, view, projection);
