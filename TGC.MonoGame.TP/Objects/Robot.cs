@@ -18,7 +18,7 @@ namespace TGC.MonoGame.TP{
         }
 
         public void AgregarRobot(Vector3 Position){
-            Matrix escala = Matrix.CreateScale(0.01f);
+            Matrix escala = Matrix.CreateScale(0.12f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
             var nuevoRobot = new Matrix[]{
                 escala * Matrix.CreateTranslation(Position),
@@ -27,7 +27,7 @@ namespace TGC.MonoGame.TP{
         }
 
         public void LoadContent(ContentManager Content){
-            RobotModel = Content.Load<Model>(ContentFolder3D + "shared/speakerrobot");
+            RobotModel = Content.Load<Model>(ContentFolder3D + "shared/Robot");
             Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
 
             foreach (var mesh in RobotModel.Meshes)
@@ -40,18 +40,19 @@ namespace TGC.MonoGame.TP{
         }
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
-            Effect.Parameters["View"].SetValue(view);
+            Effect.Parameters["View"].SetValue(view); 
             Effect.Parameters["Projection"].SetValue(projection);
-            Effect.Parameters["DiffuseColor"].SetValue(Color.Pink.ToVector3());
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Red.ToVector3());
             foreach (var mesh in RobotModel.Meshes)
             {
-                
-                for(int i=0; i < RobotWorlds.Length; i++){
-                    Matrix _robotWorld = RobotWorlds[i];
-                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _robotWorld);
+
+                for (int i = 0; i < RobotWorlds.Length; i++)
+                {
+                    Matrix _cartelWorld = RobotWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _cartelWorld);
                     mesh.Draw();
                 }
-                
+
             }
         }
     }

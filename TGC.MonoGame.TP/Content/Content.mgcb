@@ -19,7 +19,7 @@
 /processorParam:DebugMode=Auto
 /build:Effects/BasicShader.fx
 
-#begin Models/nivel1/nivel1.fbx
+#begin Models/shared/Alert.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -36,9 +36,9 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/nivel1/nivel1.fbx
+/build:Models/shared/Alert.fbx
 
-#begin Models/nivel4/Porg.fbx
+#begin Models/shared/Asteroide.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -55,45 +55,7 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/nivel4/Porg.fbx
-
-#begin Models/shared/alert.fbx
-/importer:FbxImporter
-/processor:ModelProcessor
-/processorParam:ColorKeyColor=0,0,0,0
-/processorParam:ColorKeyEnabled=True
-/processorParam:DefaultEffect=BasicEffect
-/processorParam:GenerateMipmaps=True
-/processorParam:GenerateTangentFrames=False
-/processorParam:PremultiplyTextureAlpha=True
-/processorParam:PremultiplyVertexColors=True
-/processorParam:ResizeTexturesToPowerOfTwo=False
-/processorParam:RotationX=0
-/processorParam:RotationY=0
-/processorParam:RotationZ=0
-/processorParam:Scale=1
-/processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=Compressed
-/build:Models/shared/alert.fbx
-
-#begin Models/shared/Cardboard.fbx
-/importer:FbxImporter
-/processor:ModelProcessor
-/processorParam:ColorKeyColor=0,0,0,0
-/processorParam:ColorKeyEnabled=True
-/processorParam:DefaultEffect=BasicEffect
-/processorParam:GenerateMipmaps=True
-/processorParam:GenerateTangentFrames=False
-/processorParam:PremultiplyTextureAlpha=True
-/processorParam:PremultiplyVertexColors=True
-/processorParam:ResizeTexturesToPowerOfTwo=False
-/processorParam:RotationX=0
-/processorParam:RotationY=0
-/processorParam:RotationZ=0
-/processorParam:Scale=1
-/processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=Compressed
-/build:Models/shared/Cardboard.fbx
+/build:Models/shared/Asteroide.fbx
 
 #begin Models/shared/Ceiling.fbx
 /importer:FbxImporter
@@ -114,7 +76,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Models/shared/Ceiling.fbx
 
-#begin Models/shared/checkpoint.fbx
+#begin Models/shared/Checkpoint.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -131,10 +93,10 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/shared/checkpoint.fbx
+/build:Models/shared/Checkpoint.fbx
 
-#begin Models/shared/NaveSW.obj
-/importer:OpenAssetImporter
+#begin Models/shared/luna.fbx
+/importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
@@ -150,7 +112,45 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/shared/NaveSW.obj
+/build:Models/shared/luna.fbx;Models/shared/Luna.fbx
+
+#begin Models/shared/MetaFinal.fbx
+/importer:FbxImporter
+/processor:ModelProcessor
+/processorParam:ColorKeyColor=0,0,0,0
+/processorParam:ColorKeyEnabled=True
+/processorParam:DefaultEffect=BasicEffect
+/processorParam:GenerateMipmaps=True
+/processorParam:GenerateTangentFrames=False
+/processorParam:PremultiplyTextureAlpha=True
+/processorParam:PremultiplyVertexColors=True
+/processorParam:ResizeTexturesToPowerOfTwo=False
+/processorParam:RotationX=0
+/processorParam:RotationY=0
+/processorParam:RotationZ=0
+/processorParam:Scale=1
+/processorParam:SwapWindingOrder=False
+/processorParam:TextureFormat=Compressed
+/build:Models/shared/MetaFinal.fbx
+
+#begin Models/shared/NaveSW.fbx
+/importer:FbxImporter
+/processor:ModelProcessor
+/processorParam:ColorKeyColor=0,0,0,0
+/processorParam:ColorKeyEnabled=True
+/processorParam:DefaultEffect=BasicEffect
+/processorParam:GenerateMipmaps=True
+/processorParam:GenerateTangentFrames=False
+/processorParam:PremultiplyTextureAlpha=True
+/processorParam:PremultiplyVertexColors=True
+/processorParam:ResizeTexturesToPowerOfTwo=False
+/processorParam:RotationX=0
+/processorParam:RotationY=0
+/processorParam:RotationZ=0
+/processorParam:Scale=1
+/processorParam:SwapWindingOrder=False
+/processorParam:TextureFormat=Compressed
+/build:Models/shared/NaveSW.fbx
 
 #begin Models/shared/Octopus.fbx
 /importer:FbxImporter
@@ -171,7 +171,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Models/shared/Octopus.fbx
 
-#begin Models/shared/powerup.fbx
+#begin Models/shared/Pedestal.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -188,9 +188,9 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/shared/powerup.fbx
+/build:Models/shared/Pedestal.fbx
 
-#begin Models/shared/rampa.fbx
+#begin Models/shared/PowerUpRocket.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -207,9 +207,9 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/shared/rampa.fbx
+/build:Models/shared/PowerUpRocket.fbx
 
-#begin Models/shared/rocket.fbx
+#begin Models/shared/PowerUpStar.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -226,9 +226,9 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/shared/rocket.fbx
+/build:Models/shared/PowerUpStar.fbx
 
-#begin Models/shared/scifitubule.fbx
+#begin Models/shared/Rampa.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -245,9 +245,9 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/shared/scifitubule.fbx
+/build:Models/shared/Rampa.fbx
 
-#begin Models/shared/Speakerrobot.fbx
+#begin Models/shared/Robot.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -264,57 +264,7 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/shared/Speakerrobot.fbx
-
-#begin Models/shared/star.fbx
-/importer:FbxImporter
-/processor:ModelProcessor
-/processorParam:ColorKeyColor=0,0,0,0
-/processorParam:ColorKeyEnabled=True
-/processorParam:DefaultEffect=BasicEffect
-/processorParam:GenerateMipmaps=True
-/processorParam:GenerateTangentFrames=False
-/processorParam:PremultiplyTextureAlpha=True
-/processorParam:PremultiplyVertexColors=True
-/processorParam:ResizeTexturesToPowerOfTwo=False
-/processorParam:RotationX=0
-/processorParam:RotationY=0
-/processorParam:RotationZ=0
-/processorParam:Scale=1
-/processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=Compressed
-/build:Models/shared/star.fbx
-
-#begin Models/shared/texture plank.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Models/shared/texture plank.png
-
-#begin Models/shared/thin.fbx
-/importer:FbxImporter
-/processor:ModelProcessor
-/processorParam:ColorKeyColor=0,0,0,0
-/processorParam:ColorKeyEnabled=True
-/processorParam:DefaultEffect=BasicEffect
-/processorParam:GenerateMipmaps=True
-/processorParam:GenerateTangentFrames=False
-/processorParam:PremultiplyTextureAlpha=True
-/processorParam:PremultiplyVertexColors=True
-/processorParam:ResizeTexturesToPowerOfTwo=False
-/processorParam:RotationX=0
-/processorParam:RotationY=0
-/processorParam:RotationZ=0
-/processorParam:Scale=1
-/processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=Compressed
-/build:Models/shared/thin.fbx
+/build:Models/shared/Robot.fbx
 
 #begin Models/shared/TierraLuminosa.fbx
 /importer:FbxImporter
@@ -335,7 +285,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Models/shared/TierraLuminosa.fbx
 
-#begin Models/shared/ufo_diffuse_glow.png
+#begin Models/shared/UFO/ufo_diffuse_glow.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -345,9 +295,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Models/shared/ufo_diffuse_glow.png
+/build:Models/shared/UFO/ufo_diffuse_glow.png
 
-#begin Models/shared/ufo_diffuse.png
+#begin Models/shared/UFO/ufo_diffuse.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -357,9 +307,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Models/shared/ufo_diffuse.png
+/build:Models/shared/UFO/ufo_diffuse.png
 
-#begin Models/shared/ufo_diffuse2_glow.png
+#begin Models/shared/UFO/ufo_diffuse2_glow.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -369,9 +319,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Models/shared/ufo_diffuse2_glow.png
+/build:Models/shared/UFO/ufo_diffuse2_glow.png
 
-#begin Models/shared/ufo_diffuse2.png
+#begin Models/shared/UFO/ufo_diffuse2.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -381,9 +331,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Models/shared/ufo_diffuse2.png
+/build:Models/shared/UFO/ufo_diffuse2.png
 
-#begin Models/shared/ufo_normal.png
+#begin Models/shared/UFO/ufo_normal.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -393,9 +343,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Models/shared/ufo_normal.png
+/build:Models/shared/UFO/ufo_normal.png
 
-#begin Models/shared/ufo_spec.png
+#begin Models/shared/UFO/ufo_spec.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -405,9 +355,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Models/shared/ufo_spec.png
+/build:Models/shared/UFO/ufo_spec.png
 
-#begin Models/shared/ufo.FBX
+#begin Models/shared/UFO/UFOEnemigo.FBX
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -424,7 +374,7 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/shared/ufo.FBX
+/build:Models/shared/UFO/UFOEnemigo.FBX
 
 #begin Models/shared/Wall.fbx
 /importer:FbxImporter
@@ -444,25 +394,6 @@
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
 /build:Models/shared/Wall.fbx
-
-#begin Models/shared/WarpGate.fbx
-/importer:FbxImporter
-/processor:ModelProcessor
-/processorParam:ColorKeyColor=0,0,0,0
-/processorParam:ColorKeyEnabled=True
-/processorParam:DefaultEffect=BasicEffect
-/processorParam:GenerateMipmaps=True
-/processorParam:GenerateTangentFrames=False
-/processorParam:PremultiplyTextureAlpha=True
-/processorParam:PremultiplyVertexColors=True
-/processorParam:ResizeTexturesToPowerOfTwo=False
-/processorParam:RotationX=0
-/processorParam:RotationY=0
-/processorParam:RotationZ=0
-/processorParam:Scale=1
-/processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=Compressed
-/build:Models/shared/WarpGate.fbx
 
 #begin Models/sphere/sphere.fbx
 /importer:FbxImporter

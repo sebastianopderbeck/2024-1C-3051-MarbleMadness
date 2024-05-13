@@ -18,7 +18,7 @@ namespace TGC.MonoGame.TP{
         }
 
         public void AgregarNaveSW(Vector3 Position){
-            Matrix escala = Matrix.CreateScale(0.02f);
+            Matrix escala = Matrix.CreateScale(0.08f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
             var newNaveSW = new Matrix[]{
                 escala * Matrix.CreateTranslation(Position),
@@ -27,7 +27,7 @@ namespace TGC.MonoGame.TP{
         }
 
         public void LoadContent(ContentManager Content){
-            NaveSWModel = Content.Load<Model>(ContentFolder3D + "shared/Octopus");
+            NaveSWModel = Content.Load<Model>(ContentFolder3D + "shared/NaveSW");
             Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
 
             foreach (var mesh in NaveSWModel.Meshes)

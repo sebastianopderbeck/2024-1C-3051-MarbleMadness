@@ -6,36 +6,37 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TGC.MonoGame.TP.Objects
 {
-    public class Meta
+    public class Portal
     {
 
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
 
-        public Model MetaModel { get; set; }
-        public Matrix[] MetaWorlds { get; set; }
+        public Model portalModel { get; set; }
+        public Matrix[] portalWorlds { get; set; }
         public Effect Effect { get; set; }
-        public Meta()
+
+        public Portal()
         {
-            this.MetaWorlds = new Matrix[] { };
+            this.portalWorlds = new Matrix[] { };
         }
 
-        public void AgregarMeta(Vector3 Position)
+        public void AgregarPortal(Vector3 Position)
         {
-            Matrix escala = Matrix.CreateScale(0.03f);
+            Matrix escala = Matrix.CreateScale(0.009f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
-            var nuevaMeta = new Matrix[]{
+            var nuevaRampa = new Matrix[]{
                 escala * Matrix.CreateTranslation(Position),
             };
-            MetaWorlds = MetaWorlds.Concat(nuevaMeta).ToArray();
+            portalWorlds = portalWorlds.Concat(nuevaRampa).ToArray();
         }
 
         public void LoadContent(ContentManager Content)
         {
-            MetaModel = Content.Load<Model>(ContentFolder3D + "shared/MetaFinal");
+            portalModel = Content.Load<Model>(ContentFolder3D + "shared/Pedestal");
             Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
 
-            foreach (var mesh in MetaModel.Meshes)
+            foreach (var mesh in portalModel.Meshes)
             {
                 foreach (var meshPart in mesh.MeshParts)
                 {
@@ -48,17 +49,16 @@ namespace TGC.MonoGame.TP.Objects
         {
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
-            Effect.Parameters["DiffuseColor"].SetValue(Color.Blue.ToVector3());
-            foreach (var mesh in MetaModel.Meshes)
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Yellow.ToVector3());
+            foreach (var mesh in portalModel.Meshes)
             {
-
-                for (int i = 0; i < MetaWorlds.Length; i++)
-                {
-                    Matrix _cartelWorld = MetaWorlds[i];
-                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _cartelWorld);
+                
+                for(int i=0; i < portalWorlds.Length; i++){
+                    Matrix _rampaWorld = portalWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _rampaWorld);
                     mesh.Draw();
                 }
-
+                
             }
         }
 

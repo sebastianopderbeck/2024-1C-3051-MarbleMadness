@@ -1,30 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Mime;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 using TGC.MonoGame.TP;
 using TGC.MonoGame.TP.Objects;
 
-namespace TGC.MonoGame.niveles {
+namespace TGC.MonoGame.niveles
+{
 
     public class Nivel2 {
-
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
-        public Model PisoModel { get; set; }
-        public Matrix[] PisoWorlds { get; set; }
-        public Model ParedModel { get; set; }
-        public Matrix[] ParedWorlds { get; set; }
-        //public Ball Bola { get; set; }
-        public Ovni Ovni { get; set; }
-        public PowerUps PowerUps { get; set; }
+        public Matrix[] InicioWorlds { get; set; }
+        public Model InicioModel { get; set; }
+        public Matrix[] Camino1Worlds { get; set; }
+        public Model Camino1Model { get; set; }
+        public Matrix[] FinalWorlds { get; set; }
+        public Ball Bola { get; set; }
         public Checkpoint Checkpoint { get; set; }
-        public Rampa Rampa { get; set; }
-        public Cartel Cartel { get; set; }
+        public Ovni Ovni { get; set; }
+        public Pulpito Pulpito { get; set; }
+        public Cartel Carteles { get; set; }
+        public PowerUpsStar PowerUpsStar { get; set; }
         public Effect Effect { get; set; }
+        public Portal Portal { get; set; }
+        public TierraLuminosa TierraLuminosa { get; set; }
+
+    
+
 
         public const float DistanceBetweenFloor = 12.33f;
         public const float DistanceBetweenWall = 18f;
@@ -32,148 +34,173 @@ namespace TGC.MonoGame.niveles {
         public Vector3 arriba = new Vector3(0f, 3.6f, 0f);
         public Vector3 alturaPisoPared = new(0f, 3.6f, 0f);
         public Vector3 alturaEscalera = new Vector3(0f, 6f, 0f);
-        public const float distanciaEscaleras = 3f;
+        public const float distanciaEscaleras = 2f;
+
+        public Vector3 abajo = new Vector3(0f, 0f, -3f);
+
+        // ____ World matrices ____
+        //matrices de las plataformas fijas (pisos)
+        //matrices tipo lista para que tengan los pisos flotantes
+
 
         public Nivel2()
         {
-
-            //Bola = new Ball(new(0f, 40f, 0f));
-            Rampa = new Rampa();
-            Checkpoint = new Checkpoint();
-            PowerUps = new PowerUps();
+            Bola = new Ball(new(0f,3f,0f));
             Ovni = new Ovni();
-            Cartel = new Cartel();
+            Pulpito = new Pulpito();
+            PowerUpsStar = new PowerUpsStar();
+            Portal = new Portal();
+            Checkpoint = new Checkpoint();
+            TierraLuminosa = new TierraLuminosa();
+
+
             Initialize();
         }
 
-        private void Initialize() {
+        private void Initialize()
+        {
+            //base de inicio
+            InicioWorlds = new Matrix[]{
+                escala * Matrix.Identity,
+                escala * Matrix.CreateTranslation(Vector3.Right * DistanceBetweenFloor),
+                escala * Matrix.CreateTranslation(Vector3.Left * DistanceBetweenFloor),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor),
+                escala * Matrix.CreateTranslation(Vector3.Backward * DistanceBetweenFloor ),
+                escala * Matrix.CreateTranslation((Vector3.Forward + Vector3.Right) * DistanceBetweenFloor),
+                escala * Matrix.CreateTranslation((Vector3.Forward + Vector3.Left) * DistanceBetweenFloor),
+                escala * Matrix.CreateTranslation((Vector3.Backward + Vector3.Right) * DistanceBetweenFloor),
+                escala * Matrix.CreateTranslation((Vector3.Backward + Vector3.Left) * DistanceBetweenFloor),
 
 
-            PisoWorlds = new Matrix[] {
-                //piso inicio con tres enemigos
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 11 + alturaEscalera * 3),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 12 + alturaEscalera * 3),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 13 + alturaEscalera * 3),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 14 + alturaEscalera * 3),
-
-                //pisos que vienen despues de la rampa1
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 20 + alturaEscalera * 6),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 21 + alturaEscalera * 6),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + alturaEscalera * 6),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * DistanceBetweenFloor + alturaEscalera * 6),
-                
-                //pisos que vienen despues de la rampa2
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 4 * DistanceBetweenFloor + alturaEscalera * 9),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 5 * DistanceBetweenFloor + alturaEscalera * 10),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 6 * DistanceBetweenFloor + alturaEscalera * 11),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 7 * DistanceBetweenFloor + alturaEscalera * 11),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 8 * DistanceBetweenFloor + alturaEscalera * 11),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 9 * DistanceBetweenFloor + alturaEscalera * 11),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 10 * DistanceBetweenFloor + alturaEscalera * 11),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 11 * DistanceBetweenFloor + alturaEscalera * 10),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 12 * DistanceBetweenFloor + alturaEscalera * 9),
-
-                //base final del nivel (faltan los demas pisos de los costados)
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 13 * DistanceBetweenFloor + alturaEscalera * 9),
-                //escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 9 + Vector3.Backward * DistanceBetweenFloor + alturaEscalera * 3),
-                //escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 9 + Vector3.Forward * DistanceBetweenFloor + alturaEscalera * 3),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 14 * DistanceBetweenFloor + alturaEscalera * 9),
-                //escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 10 + Vector3.Backward * DistanceBetweenFloor + alturaEscalera * 3),
-                //escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 10 + Vector3.Forward * DistanceBetweenFloor + alturaEscalera * 3),
-                escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 15 * DistanceBetweenFloor + alturaEscalera * 9),
-                //escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 11 + Vector3.Backward * DistanceBetweenFloor + alturaEscalera * 3),
-                //escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 11 + Vector3.Forward * DistanceBetweenFloor + alturaEscalera * 3),
             };
 
-            ParedWorlds = new Matrix[] {               
-                                         
+            //camino largo
+            Camino1Worlds = new Matrix[]
+            {
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 2),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 3),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 4),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 5),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 6),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 7),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 8),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 9),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 10),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 11),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 12),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 13),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 14),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 15),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 16),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 17),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 18),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 19),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 20),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 21),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 22),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 23),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 24),
+                escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 25),
             };
 
-            Rampa.AgregarRampa(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 15 + alturaEscalera * 3); //falta rotarla
-            Rampa.AgregarRampa(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * DistanceBetweenFloor + alturaEscalera * 6); //falta rotarla y acomodarla
-            
-            Checkpoint.AgregoCheckpoint(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 15 * DistanceBetweenFloor + alturaEscalera * 9);
-            
-            PowerUps.agregarPowerUp(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 14 + alturaEscalera * 3);
-            PowerUps.agregarPowerUp(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + alturaEscalera * 6);
+            //el pulpito te felicita por llegar tan lejos y te motiva
+            Pulpito.agregarPulpito((Vector3.Forward + Vector3.Left) * DistanceBetweenFloor + Vector3.Up * 3);
 
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 12 + alturaEscalera * 3);
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 7 * DistanceBetweenFloor + alturaEscalera * 11);
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 8 * DistanceBetweenFloor + alturaEscalera * 11);
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 9 * DistanceBetweenFloor + alturaEscalera * 11);
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 13 * DistanceBetweenFloor + alturaEscalera * 9);
 
-            Cartel.AgregarCartel(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 14 + Vector3.Forward * DistanceBetweenFloor + alturaEscalera * 5);
-            Cartel.AgregarCartel(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 23 + alturaEscalera * 8);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 3);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 5);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 7);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 9);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 11);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 15);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 17);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 19);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 21);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 23);
+
+            PowerUpsStar.agregarPowerUp(Vector3.Forward * DistanceBetweenFloor * 13 + arriba); //este impulsa a la pelota para que puedas pasar los ultimos ovnis que son mas rapidos
+
+            Portal.AgregarPortal(Vector3.Forward * DistanceBetweenFloor * 25);
+            Checkpoint.AgregoCheckpoint(Vector3.Forward * DistanceBetweenFloor * 25);
+
+            TierraLuminosa.agregarTierraLuminosa(Vector3.Forward * DistanceBetweenFloor * 3 + Vector3.Left * DistanceBetweenFloor * 2f + alturaEscalera);
+            TierraLuminosa.agregarTierraLuminosa(Vector3.Forward * DistanceBetweenFloor * 7 + Vector3.Right * DistanceBetweenFloor * 2f + alturaEscalera);
+            TierraLuminosa.agregarTierraLuminosa(Vector3.Forward * DistanceBetweenFloor * 11 + Vector3.Left * DistanceBetweenFloor * 2f + alturaEscalera);
+            TierraLuminosa.agregarTierraLuminosa(Vector3.Forward * DistanceBetweenFloor * 15 + Vector3.Right * DistanceBetweenFloor * 2f + alturaEscalera);
+            TierraLuminosa.agregarTierraLuminosa(Vector3.Forward * DistanceBetweenFloor * 19 + Vector3.Left * DistanceBetweenFloor * 2f + alturaEscalera);
+            TierraLuminosa.agregarTierraLuminosa(Vector3.Forward * DistanceBetweenFloor * 23 + Vector3.Right * DistanceBetweenFloor * 2f + alturaEscalera);
+
 
         }
 
-        public void LoadContent(ContentManager Content) {
-            PisoModel = Content.Load<Model>(ContentFolder3D + "shared/Ceiling");
-            ParedModel = Content.Load<Model>(ContentFolder3D + "shared/Wall");
+        public void LoadContent(ContentManager Content)
+        {
+            InicioModel = Content.Load<Model>(ContentFolder3D + "shared/Ceiling");
+            Camino1Model = Content.Load<Model>(ContentFolder3D + "shared/Ceiling");
             Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
 
-            foreach (var mesh in PisoModel.Meshes)
+            foreach (var mesh in InicioModel.Meshes)
             {
                 foreach (var meshPart in mesh.MeshParts)
                 {
                     meshPart.Effect = Effect;
                 }
             }
-            foreach (var mesh in ParedModel.Meshes)
+            foreach (var mesh in Camino1Model.Meshes)
             {
                 foreach (var meshPart in mesh.MeshParts)
                 {
                     meshPart.Effect = Effect;
                 }
             }
-            //Bola.LoadContent(Content);
-            Rampa.LoadContent(Content);
-            Checkpoint.LoadContent(Content);
-            PowerUps.LoadContent(Content);
+
+            
+            Bola.LoadContent(Content);
             Ovni.LoadContent(Content);
-            Cartel.LoadContent(Content);
-
+            PowerUpsStar.LoadContent(Content);
+            Pulpito.LoadContent(Content);
+            Checkpoint.LoadContent(Content);
+            Portal.LoadContent(Content);
+            TierraLuminosa.LoadContent(Content);
+            
         }
-
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection)
         {
 
-            //PisoModel.Draw(PisoWorlds, view, projection);
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
-            Effect.Parameters["DiffuseColor"].SetValue(Color.Violet.ToVector3());
-            foreach (var mesh in PisoModel.Meshes)
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Gray.ToVector3());
+            foreach (var mesh in InicioModel.Meshes)
             {
                 
-                for(int i=0; i < PisoWorlds.Length; i++){
-                    Matrix _pisoWorld = PisoWorlds[i];
-                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _pisoWorld);
+                for(int i=0; i < InicioWorlds.Length; i++){
+                    Matrix _inicioWorld = InicioWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _inicioWorld);
                     mesh.Draw();
                 }
                 
             }
-            Effect.Parameters["DiffuseColor"].SetValue(Color.Purple.ToVector3());
-            foreach (var mesh in ParedModel.Meshes)
+            Effect.Parameters["DiffuseColor"].SetValue(Color.LightGray.ToVector3());
+            foreach (var mesh in Camino1Model.Meshes)
             {
                 
-                for(int i=0; i < ParedWorlds.Length; i++){
-                    Matrix _pisoWorld = ParedWorlds[i];
-                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _pisoWorld);
+                for(int i=0; i < Camino1Worlds.Length; i++){
+                    Matrix _camino1World = Camino1Worlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _camino1World);
                     mesh.Draw();
                 }
                 
             }
 
-            //Bola.Draw(gameTime, view, projection);
-            Rampa.Draw(gameTime, view, projection);
-            Checkpoint.Draw(gameTime, view, projection);
-            PowerUps.Draw(gameTime, view, projection);
+            Bola.Draw(gameTime, view, projection);
             Ovni.Draw(gameTime, view, projection);
-            Cartel.Draw(gameTime, view, projection);
+            Pulpito.Draw(gameTime, view, projection);
+            PowerUpsStar.Draw(gameTime, view, projection);
+            Checkpoint.Draw(gameTime, view, projection);
+            Portal.Draw(gameTime, view, projection);
+            TierraLuminosa.Draw(gameTime, view, projection);
         }
-
 
     }
 }

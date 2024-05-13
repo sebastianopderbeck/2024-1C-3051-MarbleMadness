@@ -16,13 +16,12 @@ namespace TGC.MonoGame.niveles{
         public Matrix[] PisoWorlds { get; set; }
         public Model ParedModel { get; set; }
         public Matrix[] ParedWorlds { get; set; }
-        public Plank Planks {get; set; }
         public Ball Bola { get; set; }
         public Checkpoint Checkpoint { get; set; }
         public Ovni Ovnis { get; set; }
         public Pulpito Pulpito { get; set; }
         public Cartel Carteles { get; set; }
-        public PowerUps PowerUps{ get; set; }
+        public PowerUpsRocket PowerUpsRocket { get; set; }
         public Effect Effect { get; set; }
 
         public const float DistanceBetweenFloor = 12.33f;
@@ -42,7 +41,6 @@ namespace TGC.MonoGame.niveles{
         public NivelFinal() {
 
             Bola = new Ball(new (0f,4f,0f));
-            Planks = new Plank();
             
 
             Initialize();
@@ -59,8 +57,8 @@ namespace TGC.MonoGame.niveles{
                 
             };
 
-            Planks.AgregarPlank(new Vector3(0f,0f,0f));
-            Planks.AgregarPlank(new Vector3(0f,0f,0f));
+            //Planks.AgregarPlank(new Vector3(0f,0f,0f));
+            //Planks.AgregarPlank(new Vector3(0f,0f,0f));
 
         }
 
@@ -84,7 +82,7 @@ namespace TGC.MonoGame.niveles{
                 }
             }
             Bola.LoadContent(Content);
-            Planks.LoadContent(Content);
+            //Planks.LoadContent(Content);
         }
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
@@ -115,7 +113,7 @@ namespace TGC.MonoGame.niveles{
             }
 
             Bola.Draw(gameTime, view, projection);
-            Planks.Draw(gameTime, view, projection);
+            //Planks.Draw(gameTime, view, projection);
 
         }
 

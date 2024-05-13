@@ -1,41 +1,42 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TGC.MonoGame.TP.Objects
+namespace TGC.MonoGame.TP
 {
-    public class Meta
+
+    public class PowerUpsStar
     {
 
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
+        public Model PowerUpsModel { get; set; }
+        public Matrix[] PowerUpsWorlds { get; set; }
 
-        public Model MetaModel { get; set; }
-        public Matrix[] MetaWorlds { get; set; }
         public Effect Effect { get; set; }
-        public Meta()
+
+        public PowerUpsStar()
         {
-            this.MetaWorlds = new Matrix[] { };
+            PowerUpsWorlds = new Matrix[] { };
         }
 
-        public void AgregarMeta(Vector3 Position)
+        public void agregarPowerUp(Vector3 Position)
         {
-            Matrix escala = Matrix.CreateScale(0.03f);
+            Matrix escala = Matrix.CreateScale(30f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
-            var nuevaMeta = new Matrix[]{
+            var nuevoPulpito = new Matrix[]{
                 escala * Matrix.CreateTranslation(Position),
             };
-            MetaWorlds = MetaWorlds.Concat(nuevaMeta).ToArray();
+            PowerUpsWorlds = PowerUpsWorlds.Concat(nuevoPulpito).ToArray();
         }
 
         public void LoadContent(ContentManager Content)
         {
-            MetaModel = Content.Load<Model>(ContentFolder3D + "shared/MetaFinal");
+            PowerUpsModel = Content.Load<Model>(ContentFolder3D + "shared/PowerUpStar");
             Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
 
-            foreach (var mesh in MetaModel.Meshes)
+            foreach (var mesh in PowerUpsModel.Meshes)
             {
                 foreach (var meshPart in mesh.MeshParts)
                 {
@@ -48,19 +49,18 @@ namespace TGC.MonoGame.TP.Objects
         {
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
-            Effect.Parameters["DiffuseColor"].SetValue(Color.Blue.ToVector3());
-            foreach (var mesh in MetaModel.Meshes)
+            Effect.Parameters["DiffuseColor"].SetValue(Color.Green.ToVector3());
+            foreach (var mesh in PowerUpsModel.Meshes)
             {
 
-                for (int i = 0; i < MetaWorlds.Length; i++)
+                for (int i = 0; i < PowerUpsWorlds.Length; i++)
                 {
-                    Matrix _cartelWorld = MetaWorlds[i];
+                    Matrix _cartelWorld = PowerUpsWorlds[i];
                     Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _cartelWorld);
                     mesh.Draw();
                 }
 
             }
         }
-
     }
 }

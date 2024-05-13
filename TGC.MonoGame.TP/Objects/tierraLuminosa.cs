@@ -18,7 +18,7 @@ namespace TGC.MonoGame.TP{
         }
 
         public void agregarTierraLuminosa(Vector3 Position){
-            Matrix escala = Matrix.CreateScale(0.01f);
+            Matrix escala = Matrix.CreateScale(0.8f);
             Vector3 arriba = new Vector3(0f, 50f, 0f);
             var nuevaTierraLuminosa = new Matrix[]{
                 escala * Matrix.CreateTranslation(Position),
@@ -27,7 +27,7 @@ namespace TGC.MonoGame.TP{
         }
 
         public void LoadContent(ContentManager Content){
-            TierraLuminosaModel = Content.Load<Model>(ContentFolder3D + "shared/Octopus"); //falta agregarlo a la carpeta de contents
+            TierraLuminosaModel = Content.Load<Model>(ContentFolder3D + "shared/TierraLuminosa");
             Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
 
             foreach (var mesh in TierraLuminosaModel.Meshes)
