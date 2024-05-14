@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -14,6 +15,7 @@ namespace TGC.MonoGame.TP{
         public Matrix[] TierraLuminosaWorlds{get; set;}
         public Effect Effect { get; set; }
         //private float ModelRotation { get; set; }
+        private Vector3[] Posicion { get; set; }
 
         private float _rotation;
         //private Vector3 _rotationAxis;
@@ -33,6 +35,16 @@ namespace TGC.MonoGame.TP{
                 escala * Matrix.CreateTranslation(Position),
             };
             TierraLuminosaWorlds = TierraLuminosaWorlds.Concat(nuevaTierraLuminosa).ToArray();
+            var nuevaPosicion = new Vector3[]{
+                Position,
+            };
+            //Posicion = Posicion.  .Concat(nuevaTierraLuminosa).ToArray();
+            
+            
+            //Posicion = new Vector3[]{
+                //Position,
+            //};
+            
         }
 
         public void LoadContent(ContentManager Content){
@@ -48,14 +60,11 @@ namespace TGC.MonoGame.TP{
             }
         }
 
-        public void Update(GameTime gameTime, int index){
+        public void Update(GameTime gameTime, int index){      
 
-        // Actualizar el ángulo de rotación
-            //_rotation += _rotationSpeed;
-            
             _rotation += Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
-        // Crear la matriz de mundo para el modelo
-            TierraLuminosaWorlds[index] = Matrix.CreateRotationY(_rotation);
+            //TierraLuminosaWorlds[index] = Matrix.CreateRotationY(_rotation);
+            
         }
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){

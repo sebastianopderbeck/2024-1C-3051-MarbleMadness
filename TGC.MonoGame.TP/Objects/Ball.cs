@@ -24,9 +24,17 @@ namespace TGC.MonoGame.TP{
         public Vector3 VelocidadBola { get; set; } = Vector3.Zero;
         public Vector3 AceleracionBola { get; set; } = Vector3.Zero;
         public Vector3 DireccionBola { get; set; }
+        private Vector3 Gravedad = new (0, -9.81f, 0);
+
+        private bool OnGround { get; set; }
+        private static bool Compare(float a, float b)
+        {
+            return MathF.Abs(a - b) < float.Epsilon;
+        }
 
         public Ball(Vector3 posicionInicial){
             BallWorld = Matrix.Identity * Matrix.CreateScale(EscalaBola) * Matrix.CreateTranslation(posicionInicial);
+            OnGround = false;
         }
 
         public void LoadContent(ContentManager Content){
@@ -57,10 +65,23 @@ namespace TGC.MonoGame.TP{
                 AceleracionBola += Vector3.Forward;
             if (keyboardState.IsKeyDown(Keys.S))
                 AceleracionBola += Vector3.Backward;
+            if (keyboardState.IsKeyDown(Keys.Space) && (OnGround == true)) {
+                VelocidadBola += Vector3.Up * 300f;
+                OnGround = false;
+            }
             
             AceleracionBola += friccion;
+            AceleracionBola += Gravedad;
             VelocidadBola += AceleracionBola * 180f * deltaTime;
             PosicionBola += VelocidadBola * deltaTime;
+
+            var minimumFloor = MathHelper.Max(0f, PosicionBola.Y);
+            PosicionBola = new Vector3(PosicionBola.X, minimumFloor, PosicionBola.Z);
+
+            if (Compare(PosicionBola.Y, 0.0f) && (OnGround == false)) {
+                VelocidadBola = new Vector3(VelocidadBola.X, 0f, VelocidadBola.Z);
+                OnGround = true;
+            }
             
 
             BallWorld = Matrix.CreateScale(EscalaBola) * Matrix.CreateTranslation(PosicionBola);
