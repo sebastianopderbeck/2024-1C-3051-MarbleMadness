@@ -86,7 +86,7 @@ namespace TGC.MonoGame.TP
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
 
             Camera = new FollowCamera(GraphicsDevice, new Vector3(0, 5, 15), Vector3.Zero, Vector3.Up);
-            Ball = new Ball(new (0f,10f,0f));
+            Ball = new Ball(new (0f,30f,0f));
 
             Nivel1 = new Nivel1();
             NivelSegundaParte = new NivelParte2(); //segunda parte del nivel uno

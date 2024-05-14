@@ -24,6 +24,7 @@ namespace TGC.MonoGame.TP{
 
         public TierraLuminosa(){            
             TierraLuminosaWorlds = new Matrix[]{};
+            Posicion = new Vector3[]{};
             _rotation = 0f;
             _rotationSpeed = 0.01f;
         }
@@ -38,13 +39,7 @@ namespace TGC.MonoGame.TP{
             var nuevaPosicion = new Vector3[]{
                 Position,
             };
-            //Posicion = Posicion.  .Concat(nuevaTierraLuminosa).ToArray();
-            
-            
-            //Posicion = new Vector3[]{
-                //Position,
-            //};
-            
+            Posicion = Posicion.Concat(nuevaPosicion).ToArray();
         }
 
         public void LoadContent(ContentManager Content){
@@ -63,7 +58,7 @@ namespace TGC.MonoGame.TP{
         public void Update(GameTime gameTime, int index){      
 
             _rotation += Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
-            //TierraLuminosaWorlds[index] = Matrix.CreateRotationY(_rotation);
+            TierraLuminosaWorlds[index] = Matrix.CreateRotationY(_rotation) * Matrix.CreateTranslation(Posicion[index]);
             
         }
 

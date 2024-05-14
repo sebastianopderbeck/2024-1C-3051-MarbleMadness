@@ -19,12 +19,12 @@ namespace TGC.MonoGame.TP{
         public Effect Effect { get; set; }
 
         public float EscalaBola { get; set; } = 0.024f;
-        public Vector3 PosicionBola { get; set; } = Vector3.Zero;
+        public Vector3 PosicionBola { get; set; }
         public Matrix RotacionBola { get; set; } = Matrix.Identity;
         public Vector3 VelocidadBola { get; set; } = Vector3.Zero;
         public Vector3 AceleracionBola { get; set; } = Vector3.Zero;
         public Vector3 DireccionBola { get; set; }
-        private Vector3 Gravedad = new (0, -9.81f, 0);
+        private Vector3 Gravedad = new (0, -3f, 0);
 
         private bool OnGround { get; set; }
         private static bool Compare(float a, float b)
@@ -33,7 +33,8 @@ namespace TGC.MonoGame.TP{
         }
 
         public Ball(Vector3 posicionInicial){
-            BallWorld = Matrix.Identity * Matrix.CreateScale(EscalaBola) * Matrix.CreateTranslation(posicionInicial);
+            PosicionBola = posicionInicial;
+            BallWorld = Matrix.Identity * Matrix.CreateScale(EscalaBola) * Matrix.CreateTranslation(PosicionBola);
             OnGround = false;
         }
 
@@ -54,7 +55,7 @@ namespace TGC.MonoGame.TP{
             var deltaTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
             var keyboardState = Keyboard.GetState();
             AceleracionBola = Vector3.Zero;
-            Vector3 friccion = -VelocidadBola * 0.07f;
+            Vector3 friccion = -VelocidadBola * 0.03f;
 
 
             if (keyboardState.IsKeyDown(Keys.A))
