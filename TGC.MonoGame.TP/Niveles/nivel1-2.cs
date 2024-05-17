@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.MonoGame.TP;
 using TGC.MonoGame.TP.Objects;
+using TGC.MonoGame.TP.Collisions;
 
 namespace TGC.MonoGame.niveles {
 
@@ -16,6 +17,7 @@ namespace TGC.MonoGame.niveles {
         public const string ContentFolderEffects = "Effects/";
         public Model PisoModel { get; set; }
         public Matrix[] PisoWorlds { get; set; }
+        public BoundingBox PisoCollider;
         public Model ParedModel { get; set; }
         public Matrix[] ParedWorlds { get; set; }
         public Ovni Ovni { get; set; }
@@ -126,6 +128,8 @@ namespace TGC.MonoGame.niveles {
             ParedModel = Content.Load<Model>(ContentFolder3D + "shared/Wall");
             Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
 
+
+
             foreach (var mesh in PisoModel.Meshes)
             {
                 foreach (var meshPart in mesh.MeshParts)
@@ -140,7 +144,9 @@ namespace TGC.MonoGame.niveles {
                     meshPart.Effect = Effect;
                 }
             }
-            
+
+            PisoCollider = BoundingVolumesExtensions.CreateAABBFrom(PisoModel);
+
             //Rampa.LoadContent(Content);
             Checkpoint.LoadContent(Content);
             PowerUpsRocket.LoadContent(Content);

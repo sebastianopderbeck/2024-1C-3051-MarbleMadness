@@ -6,24 +6,23 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.MonoGame.TP;
+using TGC.MonoGame.TP.Collisions;
+
 
 namespace TGC.MonoGame.niveles{
     public class Nivel1{
 
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
-        public Model PisoModel { get; set; }
-        public Matrix[] PisoWorlds { get; set; }
-        public Model ParedModel { get; set; }
-        public Matrix[] ParedWorlds { get; set; }
-        public Checkpoint Checkpoint { get; set; }
+        
+       /* public Checkpoint Checkpoint { get; set; }
         public NaveSW NaveSW { get; set; }
         public Asteroide Asteroide { get; set; }
         public Ovni Ovnis { get; set; }
         public Pulpito Pulpito { get; set; }
         public Cartel Carteles { get; set; }
         public PowerUpsRocket PowerUpsRocket{ get; set; }
-        public TierraLuminosa Tierras { get; set; }
+        public TierraLuminosa Tierras { get; set; }*/
         public Effect Effect { get; set; }
 
        
@@ -34,14 +33,26 @@ namespace TGC.MonoGame.niveles{
         public Vector3 alturaPisoPared = new(0f, 3.6f, 0f);
         public Vector3 alturaEscalera = new Vector3(0f, 6f, 0f);
         public const float distanciaEscaleras = 3f;
-        
-        // ____ World matrices ____
-        //matrices de las plataformas fijas (pisos)
-        //matrices tipo lista para que tengan los pisos flotantes
-         
+        public int index { get; set; }
+
+        // Models
+        public Model PisoModel { get; set; }
+        public Model ParedModel { get; set; }
+
+        // World matrices 
+        public Matrix[] PisoWorlds { get; set; }
+        public Matrix[] ParedWorlds { get; set; }
+
+        // Colliders
+        // Bounding Boxes representing our colliders (floor, stairs, boxes)
+        public BoundingBox[] Colliders { get; set; }
+        private bool ShowGizmos { get; set; } = true;
+
+
+        //Constructor Nivel 1
         public Nivel1() {
 
-            Ovnis = new Ovni();
+            /*Ovnis = new Ovni();
             Pulpito = new Pulpito();
             Checkpoint = new Checkpoint(); 
             NaveSW = new NaveSW();
@@ -49,19 +60,29 @@ namespace TGC.MonoGame.niveles{
             PowerUpsRocket = new PowerUpsRocket();
             Tierras = new TierraLuminosa();
             Asteroide = new Asteroide();
-            //NaveEspecial = new NaveEspecial();
+            //NaveEspecial = new NaveEspecial();*/
           
             Initialize();
 
         }
-        
+
+        public BoundingBox[] getCollaiders() {
+            return this.Colliders;
+        }
+
+        public int getCollaidersIndex()
+        {
+            return this.index;
+        }
+
+        //Inicializar matrices
         private void Initialize() {
           
             PisoWorlds = new Matrix[]{
                 // Matrix.Identity * Matrix.CreateScale(0.1f),
                 // Matrix.CreateTranslation(411f, 50f, 411f)* Matrix.CreateScale(0.1f),
                 
-                //base de incio
+                //Base de incio
                 escala * Matrix.Identity,
                 escala * Matrix.CreateTranslation(Vector3.Right * DistanceBetweenFloor),
                 escala * Matrix.CreateTranslation(Vector3.Left * DistanceBetweenFloor),
@@ -72,17 +93,14 @@ namespace TGC.MonoGame.niveles{
                 escala * Matrix.CreateTranslation((Vector3.Backward + Vector3.Right) * DistanceBetweenFloor),
                 escala * Matrix.CreateTranslation((Vector3.Backward + Vector3.Left) * DistanceBetweenFloor),
 
-
                 //Piso inicial
                 escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor) * 2),
         
-
                 //escaleras
                 escala * Matrix.CreateTranslation(Vector3.Forward * DistanceBetweenFloor * 4),
                 escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 5 + distanciaEscaleras) + alturaEscalera),
                 escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 6 + distanciaEscaleras * 2) + alturaEscalera * 2),
                 escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + alturaEscalera * 3),
-
 
                 //segundo camindo largo
                 escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor + alturaEscalera * 3),
@@ -93,7 +111,6 @@ namespace TGC.MonoGame.niveles{
                 escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 8 + alturaEscalera * 3),
                 escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 9 + alturaEscalera * 3),
                 
-
                 //base final
                 escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 10 + alturaEscalera * 3),
                 escala * Matrix.CreateTranslation(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 10 + Vector3.Backward * DistanceBetweenFloor + alturaEscalera * 3),
@@ -155,7 +172,16 @@ namespace TGC.MonoGame.niveles{
             
         };
 
-                       
+            // Crear Bounding Box para las geometrias staticas del piso
+            Colliders = new BoundingBox[PisoWorlds.Length + ParedWorlds.Length];
+            //Instanciar las Bounding Boxes del piso
+            index = 0;
+            for (; index < PisoWorlds.Length; index++)
+                Colliders[index] = BoundingVolumesExtensions.FromMatrix(PisoWorlds[index]);
+            for (; index < ParedWorlds.Length; index++)
+                Colliders[index] = BoundingVolumesExtensions.FromMatrix(ParedWorlds[index]);
+
+            /*          
             //Enemigos
             Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 2 + alturaEscalera * 3 + Vector3.Up * 2);
             Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 7 + alturaEscalera * 3 + Vector3.Up * 2);
@@ -176,8 +202,7 @@ namespace TGC.MonoGame.niveles{
             //Objetos decorativos
             Tierras.agregarTierraLuminosa(new Vector3(-50f, 25f, -34f));
             Tierras.agregarTierraLuminosa(new Vector3(-50f, 35f, -120));
-            Asteroide.AgregarAsteroide(new Vector3(25f, 35f, -90));
-
+            Asteroide.AgregarAsteroide(new Vector3(25f, 35f, -90)); */
 
         }
 
@@ -201,48 +226,48 @@ namespace TGC.MonoGame.niveles{
                     meshPart.Effect = Effect;
                 }
             }
-            Checkpoint.LoadContent(Content);
+            /*Checkpoint.LoadContent(Content);
             NaveSW.LoadContent(Content);
             Ovnis.LoadContent(Content);
             Pulpito.LoadContent(Content);
             Carteles.LoadContent(Content);
             PowerUpsRocket.LoadContent(Content);
             Tierras.LoadContent(Content);
-            Asteroide.LoadContent(Content);
+            Asteroide.LoadContent(Content);*/
         }
 
         public void Update(GameTime gameTime){
-            Tierras.Update(gameTime, 1);
+            //Tierras.Update(gameTime, 1);
         }
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
 
             //PisoModel.Draw(PisoWorlds, view, projection);
             Effect.Parameters["View"].SetValue(view);
             Effect.Parameters["Projection"].SetValue(projection);
+
             Effect.Parameters["DiffuseColor"].SetValue(Color.Violet.ToVector3());
             foreach (var mesh in PisoModel.Meshes)
             {
-                
                 for(int i=0; i < PisoWorlds.Length; i++){
                     Matrix _pisoWorld = PisoWorlds[i];
                     Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _pisoWorld);
                     mesh.Draw();
                 }
-                
+
             }
             Effect.Parameters["DiffuseColor"].SetValue(Color.Purple.ToVector3());
             foreach (var mesh in ParedModel.Meshes)
-            {
-                
+            {   
                 for(int i=0; i < ParedWorlds.Length; i++){
-                    Matrix _pisoWorld = ParedWorlds[i];
-                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _pisoWorld);
+                    Matrix _paredWorld = ParedWorlds[i];
+                    Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * _paredWorld);
                     mesh.Draw();
                 }
                 
             }
 
-            Checkpoint.Draw(gameTime, view, projection);
+
+            /*Checkpoint.Draw(gameTime, view, projection);
             NaveSW.Draw(gameTime, view, projection);
             Ovnis.Draw(gameTime, view, projection);
             Pulpito.Draw(gameTime, view, projection);
@@ -250,7 +275,7 @@ namespace TGC.MonoGame.niveles{
             PowerUpsRocket.Draw(gameTime, view, projection);
             Tierras.Draw(gameTime, view, projection);
             Asteroide.Draw(gameTime, view, projection);
-            //NaveEspecial.Draw(gameTime, view, projection);
+            //NaveEspecial.Draw(gameTime, view, projection);*/
 
 
         }

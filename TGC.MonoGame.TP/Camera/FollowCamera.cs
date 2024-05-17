@@ -12,7 +12,7 @@ namespace TGC.MonoGame.TP
         private Vector3 position;
         private Vector3 target;
         private Vector3 up;
-        private Vector3 offset = new (0f,5f,30f);
+        private Vector3 offset = new(0f, 5f, 30f);
 
         public FollowCamera(GraphicsDevice graphicsDevice, Vector3 initialPosition, Vector3 initialTarget, Vector3 initialUp)
         {
@@ -26,7 +26,7 @@ namespace TGC.MonoGame.TP
 
         public void Update(Vector3 objectPosition)
         {
-            
+
             var mouseState = Mouse.GetState();
             float deltaX = mouseState.X - (GraphicsDeviceManager.DefaultBackBufferWidth / 2);
             float deltaY = mouseState.Y - (GraphicsDeviceManager.DefaultBackBufferHeight / 2);

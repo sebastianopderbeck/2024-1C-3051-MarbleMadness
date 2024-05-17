@@ -5,14 +5,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.MonoGame.TP;
 using TGC.MonoGame.niveles;
+using TGC.MonoGame.TP.Collisions;
+using MonoGamers.Camera;
 
 namespace TGC.MonoGame.TP
 {
-    /// <summary>
-    ///     Esta es la clase principal del juego.
-    ///     Inicialmente puede ser renombrado o copiado para hacer mas ejemplos chicos, en el caso de copiar para que se
-    ///     ejecute el nuevo ejemplo deben cambiar la clase que ejecuta Program <see cref="Program.Main()" /> linea 10.
-    /// </summary>
     public class TGCGame : Game
     {
         public const string ContentFolder3D = "Models/";
@@ -22,9 +19,6 @@ namespace TGC.MonoGame.TP
         public const string ContentFolderSpriteFonts = "SpriteFonts/";
         public const string ContentFolderTextures = "Textures/";
 
-        /// <summary>
-        ///     Constructor del juego.
-        /// </summary>
         public TGCGame()
         {
             // Maneja la configuracion y la administracion del dispositivo grafico.
@@ -51,21 +45,26 @@ namespace TGC.MonoGame.TP
         private Matrix Projection { get; set; }
         
         private Ball Ball{ get; set; }
+        private BoundingCylinder SphereCollider { get; set; }
         private Nivel1 Nivel1 { get; set; }
         private NivelParte2 NivelSegundaParte { get; set; }
         private Nivel2 Nivel2 { get; set; }
         private Nivel3 Nivel3 { get; set; }
         private NivelFinal NivelFinal { get; set; }
-        private FollowCamera Camera { get; set; }
+        public FollowCamera Camera { get; set; }
         private Skybox Skybox { get; set; }
         float distance = 20;
         Vector3 cameraPosition;
+
+
+        public BoundingBox[] Colliders { get; set; }
+
+        public int indexPiso { get; set; }
+
+        private bool ShowGizmos { get; set; } = true;
+
         //private Checkpoint Checkpoint{ get; set; }
 
-        /// <summary>
-        ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
-        ///     Escribir aqui el codigo de inicializacion: el procesamiento que podemos pre calcular para nuestro juego.
-        /// </summary>
         protected override void Initialize()
         {
             // La logica de inicializacion que no depende del contenido se recomienda poner en este metodo.
@@ -78,24 +77,21 @@ namespace TGC.MonoGame.TP
             GraphicsDevice.RasterizerState = rasterizerState;
             // Seria hasta aca.
 
+
             // Configuramos nuestras matrices de la escena.
             World = Matrix.Identity;
             
             View = Matrix.CreateLookAt(Vector3.UnitZ * 150, Vector3.Zero, Vector3.Up);
-            Projection =
-                Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
+            Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
 
             Camera = new FollowCamera(GraphicsDevice, new Vector3(0, 5, 15), Vector3.Zero, Vector3.Up);
+            Nivel1 = new Nivel1();
             Ball = new Ball(new (0f,30f,0f));
 
-            Nivel1 = new Nivel1();
-            NivelSegundaParte = new NivelParte2(); //segunda parte del nivel uno
+            Ball.Colliders = Nivel1.getCollaiders();
+            Ball.index = Nivel1.getCollaidersIndex();
+            Ball.BallCamera = Camera;
 
-            //Nivel2 = new Nivel2();
-
-            //Nivel3 = new Nivel3();
-            
-            //NivelFinal = new NivelFinal();
             base.Initialize();
         }
 
@@ -116,6 +112,7 @@ namespace TGC.MonoGame.TP
             // En el juego no pueden usar BasicEffect de MG, deben usar siempre efectos propios.
             Effect = Content.Load<Effect>(ContentFolderEffects + "BasicShader");
 
+            
             // Asigno el efecto que cargue a cada parte del mesh.
             // Un modelo puede tener mas de 1 mesh internamente.
             foreach (var mesh in Model.Meshes)
@@ -129,7 +126,7 @@ namespace TGC.MonoGame.TP
 
 
             Nivel1.LoadContent(Content);
-            NivelSegundaParte.LoadContent(Content);
+            //NivelSegundaParte.LoadContent(Content);
 
             //Nivel2.LoadContent(Content);
 
@@ -141,16 +138,15 @@ namespace TGC.MonoGame.TP
             Ball.LoadContent(Content);
             Skybox = new Skybox(ContentFolderTextures + "Skybox/SkyBox", Content);
 
+            
+
             base.LoadContent();
         }
 
-        /// <summary>
-        ///     Se llama en cada frame.
-        ///     Se debe escribir toda la logica de computo del modelo, asi como tambien verificar entradas del usuario y reacciones
-        ///     ante ellas.
-        /// </summary>
+
         protected override void Update(GameTime gameTime)
         {
+
             // Aca deberiamos poner toda la logica de actualizacion del juego.
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
@@ -169,7 +165,7 @@ namespace TGC.MonoGame.TP
             
             Ball.Update(gameTime);
 
-            Camera.Update(Ball.PosicionBola);
+            Camera.Update(Ball.BallPosition);
             Nivel1.Update(gameTime);
 
             base.Update(gameTime);
@@ -197,31 +193,26 @@ namespace TGC.MonoGame.TP
             
             Ball.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
             Nivel1.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
-            NivelSegundaParte.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
+            //NivelSegundaParte.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
 
             //Nivel2.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
 
             //Nivel3.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
-            
 
             var originalRasterizerState = GraphicsDevice.RasterizerState;
             var rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
             Graphics.GraphicsDevice.RasterizerState = rasterizerState;
 
-            Skybox.Draw(Camera.ViewMatrix, Camera.ProjectionMatrix, Ball.PosicionBola);
+            Skybox.Draw(Camera.ViewMatrix, Camera.ProjectionMatrix, Ball.BallPosition);
 
             GraphicsDevice.RasterizerState = originalRasterizerState;
+
         }
 
-        /// <summary>
-        ///     Libero los recursos que se cargaron en el juego.
-        /// </summary>
         protected override void UnloadContent()
         {
-            // Libero los recursos.
             Content.Unload();
-
             base.UnloadContent();
         }
     }
