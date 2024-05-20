@@ -11,19 +11,31 @@ namespace TGC.MonoGame.TP{
         public const string ContentFolderEffects = "Effects/";
         public Model CheckpointModel{get; set;}
         public Matrix[] CheckpointWorlds{get; set;}
+        private Vector3[] Posicion { get; set; }
+        private Vector3[] PosicionInicial { get; set; }
         public Effect Effect { get; set; }
+        private float Scale { get; set; }
+        private float _rotation = 0f;
+        private const float _rotationSpeed = 0.5f;
+        private int MovementDirecion = 1;
 
         public Checkpoint(){
             CheckpointWorlds = new Matrix[]{};
+            Posicion = new Vector3[]{};
+            PosicionInicial = new Vector3[]{};
         }
 
         public void AgregoCheckpoint(Vector3 Position){
-            Matrix escala = Matrix.CreateScale(0.02f);
-            Vector3 arriba = new Vector3(0f, 50f, 0f);
+            Scale = 0.02f;
             var nuevoCheckpoint = new Matrix[]{
-                escala * Matrix.CreateTranslation(Position),
+                Matrix.CreateScale(Scale) * Matrix.CreateTranslation(Position),
             };
             CheckpointWorlds = CheckpointWorlds.Concat(nuevoCheckpoint).ToArray();
+            var nuevaPosicion = new Vector3[]{
+                Position,
+            };
+            Posicion = Posicion.Concat(nuevaPosicion).ToArray();
+            PosicionInicial = PosicionInicial.Concat(nuevaPosicion).ToArray();
         }
 
         public void LoadContent(ContentManager Content){
@@ -37,6 +49,30 @@ namespace TGC.MonoGame.TP{
                     meshPart.Effect = Effect;
                 }
             }
+        }
+
+        public void Update(GameTime gameTime, int index){      
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _rotation += _rotationSpeed * deltaTime;
+
+            var MovementAxis = Vector3.Up;
+            var speed = 0.15f;
+
+            float distance = Posicion[index].Y - PosicionInicial[index].Y;
+            if(MovementDirecion == 1){
+                Posicion[index] += MovementAxis * speed * deltaTime;
+                if (distance > 0.5f)
+                    MovementDirecion = 0;
+            }
+            else if(MovementDirecion == 0){
+                Posicion[index] += -MovementAxis * speed * deltaTime;
+                if (distance < 0.2f)
+                    MovementDirecion = 1;
+            }
+            CheckpointWorlds[index] = Matrix.CreateScale(Scale) * 
+                                      Matrix.CreateRotationY(_rotation) * 
+                                      Matrix.CreateTranslation(Posicion[index]);
+            
         }
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){

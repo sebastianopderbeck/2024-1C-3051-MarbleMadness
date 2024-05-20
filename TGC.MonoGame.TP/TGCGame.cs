@@ -169,7 +169,7 @@ namespace TGC.MonoGame.TP
             
             Ball.Update(gameTime);
 
-            Camera.Update(Ball.PosicionBola);
+            Camera.Update(Ball.BallPosition);
             Nivel1.Update(gameTime);
 
             base.Update(gameTime);
@@ -209,7 +209,7 @@ namespace TGC.MonoGame.TP
             rasterizerState.CullMode = CullMode.None;
             Graphics.GraphicsDevice.RasterizerState = rasterizerState;
 
-            Skybox.Draw(Camera.ViewMatrix, Camera.ProjectionMatrix, Ball.PosicionBola);
+            Skybox.Draw(Camera.ViewMatrix, Camera.ProjectionMatrix, Ball.BallPosition);
 
             GraphicsDevice.RasterizerState = originalRasterizerState;
         }

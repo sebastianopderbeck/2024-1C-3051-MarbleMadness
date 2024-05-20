@@ -56,8 +56,8 @@ namespace TGC.MonoGame.TP{
         }
 
         public void Update(GameTime gameTime, int index){      
-
-            _rotation += Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _rotation += _rotationSpeed * deltaTime;
             TierraLuminosaWorlds[index] = Matrix.CreateRotationY(_rotation) * Matrix.CreateTranslation(Posicion[index]);
             
         }

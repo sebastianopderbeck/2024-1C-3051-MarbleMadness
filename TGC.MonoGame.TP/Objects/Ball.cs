@@ -12,19 +12,32 @@ namespace TGC.MonoGame.TP{
     
     public class Ball{
 
+        enum BallMaterial {
+            Standard,
+            Stone,
+            Gum
+        }
+
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
-        public Model BallModel{get; set;}
-        public Matrix BallWorld{get; set;}
+        public Model BallModel { get; set; }
+        public Matrix BallWorld { get; set;}
         public Effect Effect { get; set; }
-
-        public float EscalaBola { get; set; } = 0.024f;
-        public Vector3 PosicionBola { get; set; }
+        private BallMaterial BallType { get; set; }
+        public float BallScale { get; set; } = 0.024f;
         public Matrix RotacionBola { get; set; } = Matrix.Identity;
         public Vector3 VelocidadBola { get; set; } = Vector3.Zero;
         public Vector3 AceleracionBola { get; set; } = Vector3.Zero;
         public Vector3 DireccionBola { get; set; }
         private Vector3 Gravedad = new (0, -3f, 0);
+        //New
+        public Vector3 BallPosition { get; set; }
+        private Vector3 BallFrontDirection { get; set; } = Vector3.Forward;
+        private Vector3 BallVelocity { get; set; } = Vector3.Zero;
+        private float Force { get; set; } = 2f;
+        private float BallMass { get; set; } = 1.0f;
+        private float Friction { get; set; } = 2f;
+
 
         private bool OnGround { get; set; }
         private static bool Compare(float a, float b)
@@ -33,8 +46,8 @@ namespace TGC.MonoGame.TP{
         }
 
         public Ball(Vector3 posicionInicial){
-            PosicionBola = posicionInicial;
-            BallWorld = Matrix.Identity * Matrix.CreateScale(EscalaBola) * Matrix.CreateTranslation(PosicionBola);
+            BallPosition = posicionInicial;
+            BallWorld = Matrix.Identity * Matrix.CreateScale(BallScale) * Matrix.CreateTranslation(BallPosition);
             OnGround = false;
         }
 
@@ -52,7 +65,7 @@ namespace TGC.MonoGame.TP{
 
         public void Update(GameTime gameTime){
 
-            var deltaTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
+            /*var deltaTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
             var keyboardState = Keyboard.GetState();
             AceleracionBola = Vector3.Zero;
             Vector3 friccion = -VelocidadBola * 0.03f;
@@ -67,12 +80,12 @@ namespace TGC.MonoGame.TP{
             if (keyboardState.IsKeyDown(Keys.S))
                 AceleracionBola += Vector3.Backward;
             if (keyboardState.IsKeyDown(Keys.Space) && (OnGround == true)) {
-                VelocidadBola += Vector3.Up * 300f;
+                VelocidadBola += Vector3.Up * 150f;
                 OnGround = false;
             }
             
             AceleracionBola += friccion;
-            AceleracionBola += Gravedad;
+            //AceleracionBola += Gravedad;
             VelocidadBola += AceleracionBola * 180f * deltaTime;
             PosicionBola += VelocidadBola * deltaTime;
 
@@ -83,10 +96,44 @@ namespace TGC.MonoGame.TP{
                 VelocidadBola = new Vector3(VelocidadBola.X, 0f, VelocidadBola.Z);
                 OnGround = true;
             }
-            
 
-            BallWorld = Matrix.CreateScale(EscalaBola) * Matrix.CreateTranslation(PosicionBola);
+            Respawn();
             
+            BallWorld = Matrix.CreateScale(BallScale) * Matrix.CreateTranslation(PosicionBola);
+            */
+            Movement(gameTime);
+            
+        }
+
+        public void Movement (GameTime gameTime){
+            
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var keyboardState = Keyboard.GetState();
+            Vector3 aceleracion = Vector3.Zero;
+
+            if (keyboardState.IsKeyDown(Keys.W))
+                aceleracion += BallFrontDirection * (Force / BallMass);
+            else if (keyboardState.IsKeyDown(Keys.S))
+                aceleracion += -BallFrontDirection * (Force / BallMass);
+            if (keyboardState.IsKeyDown(Keys.A))
+                aceleracion += Vector3.Left * (Force / BallMass);
+            else if (keyboardState.IsKeyDown(Keys.D))
+                aceleracion += Vector3.Right * (Force / BallMass);
+            
+            BallVelocity += aceleracion - (Friction * BallVelocity) * deltaTime;
+            BallPosition += BallVelocity * deltaTime;
+
+            BallWorld = Matrix.CreateScale(BallScale) * Matrix.CreateTranslation(BallPosition);
+        }
+
+        public void Respawn(/*Checkpoint checkpoint*/){
+            if (BallPosition.Y < -100f){
+                BallPosition = new (0f, 10f, 0f);
+            }
+        }
+
+        public void PickUp(/*Texture newTexture, */){
+
         }
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){

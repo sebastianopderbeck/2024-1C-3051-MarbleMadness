@@ -157,8 +157,8 @@ namespace TGC.MonoGame.niveles{
 
                        
             //Enemigos
-            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 2 + alturaEscalera * 3 + Vector3.Up * 2);
-            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 7 + alturaEscalera * 3 + Vector3.Up * 2);
+            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 2 + alturaEscalera * 3 + Vector3.Up * 2, 1);
+            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 7 + alturaEscalera * 3 + Vector3.Up * 2, 0);
             Pulpito.agregarPulpito((Vector3.Forward + Vector3.Left) * DistanceBetweenFloor + Vector3.Up * 3);
             
             //Checkpoint
@@ -212,7 +212,11 @@ namespace TGC.MonoGame.niveles{
         }
 
         public void Update(GameTime gameTime){
+            Tierras.Update(gameTime, 0);
             Tierras.Update(gameTime, 1);
+            Checkpoint.Update(gameTime, 0);
+            Ovnis.Update(gameTime, 0);
+            Ovnis.Update(gameTime, 1);
         }
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
 
