@@ -24,6 +24,7 @@ namespace TGC.MonoGame.TP{
         private Matrix BallScale { get; set; }
         public Vector3 BallPosition { get; set; }
         public Matrix BallRotation { get; set; }
+        private BallMaterial BallType { get; set; }
         private Vector3 BallFrontDirection { get; set; }
         private const float BallRotatingVelocity = 0.06f;
         private const float BallSideSpeed = 30f;
@@ -49,6 +50,13 @@ namespace TGC.MonoGame.TP{
         private static bool Compare(float a, float b)
         {
             return MathF.Abs(a - b) < float.Epsilon;
+        }
+
+        enum BallMaterial
+        {
+            Standard,
+            Stone,
+            Gum
         }
 
         public Ball(Vector3 posicionInicial){
@@ -170,6 +178,18 @@ namespace TGC.MonoGame.TP{
             BallPosition = BallSphere.Center;
             BallVelocity = new Vector3(0f, BallVelocity.Y, 0f);
             BallWorld = BallScale * BallRotation * Matrix.CreateTranslation(BallPosition);
+
+        }
+        public void Respawn(/*Checkpoint checkpoint*/)
+        {
+            if (BallPosition.Y < -100f)
+            {
+                BallPosition = new(0f, 10f, 0f);
+            }
+        }
+
+        public void PickUp(/*Texture newTexture, */)
+        {
 
         }
 

@@ -105,16 +105,16 @@ namespace TGC.MonoGame.niveles
             Pulpito.agregarPulpito((Vector3.Forward + Vector3.Left) * DistanceBetweenFloor + Vector3.Up * 3);
 
 
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 3);
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 5);
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 7);
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 9);
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 11);
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 15);
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 17);
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 19);
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 21);
-            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 23);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 3, 1);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 5, 0);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 7, 1);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 9, 0);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 11, 1);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 15, 0);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 17, 1);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 19, 0);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 21, 1);
+            Ovni.agregarOvni(Vector3.Forward * DistanceBetweenFloor * 23, 1);
 
             PowerUpsStar.agregarPowerUp(Vector3.Forward * DistanceBetweenFloor * 13 + arriba); //este impulsa a la pelota para que puedas pasar los ultimos ovnis que son mas rapidos
 

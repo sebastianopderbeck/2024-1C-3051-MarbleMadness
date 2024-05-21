@@ -38,6 +38,11 @@ namespace TGC.MonoGame.TP{
             }
         }
 
+        public void Movement(GameTime gameTime, int index)
+        {
+            //CartelpointWorlds[index] = Matrix.CreateRotationY();
+        }
+
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
             Effect.Parameters["View"].SetValue(view); //Cambio View por Eso
             Effect.Parameters["Projection"].SetValue(projection);

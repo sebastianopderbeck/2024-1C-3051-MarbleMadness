@@ -104,11 +104,11 @@ namespace TGC.MonoGame.niveles {
             PowerUpsRocket.agregarPowerUp(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 14 + alturaEscalera * 3.5f);
             PowerUpsRocket.agregarPowerUp(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * DistanceBetweenFloor + alturaEscalera * 6.5f);
 
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 12 + alturaEscalera * 3);
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 7 * DistanceBetweenFloor + alturaEscalera * 11);
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 8 * DistanceBetweenFloor + alturaEscalera * 11);
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 9 * DistanceBetweenFloor + alturaEscalera * 11);
-            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 13 * DistanceBetweenFloor + alturaEscalera * 9);
+            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 12 + alturaEscalera * 3, 1);
+            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 7 * DistanceBetweenFloor + alturaEscalera * 11, 0);
+            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 8 * DistanceBetweenFloor + alturaEscalera * 11, 1);
+            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 9 * DistanceBetweenFloor + alturaEscalera * 11, 0);
+            Ovni.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 22 + Vector3.Backward * 13 * DistanceBetweenFloor + alturaEscalera * 9, 1);
 
             Cartel.AgregarCartel(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 15 + Vector3.Forward * DistanceBetweenFloor + alturaEscalera * 5);
             Cartel.AgregarCartel(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 24 + alturaEscalera * 8);

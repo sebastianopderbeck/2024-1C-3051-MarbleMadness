@@ -15,14 +15,14 @@ namespace TGC.MonoGame.niveles{
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
         
-       /* public Checkpoint Checkpoint { get; set; }
+        public Checkpoint Checkpoint { get; set; }
         public NaveSW NaveSW { get; set; }
         public Asteroide Asteroide { get; set; }
         public Ovni Ovnis { get; set; }
         public Pulpito Pulpito { get; set; }
         public Cartel Carteles { get; set; }
         public PowerUpsRocket PowerUpsRocket{ get; set; }
-        public TierraLuminosa Tierras { get; set; }*/
+        public TierraLuminosa Tierras { get; set; }
         public Effect Effect { get; set; }
 
        
@@ -52,7 +52,7 @@ namespace TGC.MonoGame.niveles{
         //Constructor Nivel 1
         public Nivel1() {
 
-            /*Ovnis = new Ovni();
+            Ovnis = new Ovni();
             Pulpito = new Pulpito();
             Checkpoint = new Checkpoint(); 
             NaveSW = new NaveSW();
@@ -60,7 +60,7 @@ namespace TGC.MonoGame.niveles{
             PowerUpsRocket = new PowerUpsRocket();
             Tierras = new TierraLuminosa();
             Asteroide = new Asteroide();
-            //NaveEspecial = new NaveEspecial();*/
+            //NaveEspecial = new NaveEspecial();
           
             Initialize();
 
@@ -181,10 +181,10 @@ namespace TGC.MonoGame.niveles{
             for (; index < ParedWorlds.Length; index++)
                 Colliders[index] = BoundingVolumesExtensions.FromMatrix(ParedWorlds[index]);
 
-            /*          
+                      
             //Enemigos
-            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 2 + alturaEscalera * 3 + Vector3.Up * 2);
-            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 7 + alturaEscalera * 3 + Vector3.Up * 2);
+            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 2 + alturaEscalera * 3 + Vector3.Up * 2, 1);
+            Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 7 + alturaEscalera * 3 + Vector3.Up * 2, 0);
             Pulpito.agregarPulpito((Vector3.Forward + Vector3.Left) * DistanceBetweenFloor + Vector3.Up * 3);
             
             //Checkpoint
@@ -202,7 +202,7 @@ namespace TGC.MonoGame.niveles{
             //Objetos decorativos
             Tierras.agregarTierraLuminosa(new Vector3(-50f, 25f, -34f));
             Tierras.agregarTierraLuminosa(new Vector3(-50f, 35f, -120));
-            Asteroide.AgregarAsteroide(new Vector3(25f, 35f, -90)); */
+            Asteroide.AgregarAsteroide(new Vector3(25f, 35f, -90));
 
         }
 
@@ -226,18 +226,22 @@ namespace TGC.MonoGame.niveles{
                     meshPart.Effect = Effect;
                 }
             }
-            /*Checkpoint.LoadContent(Content);
+            Checkpoint.LoadContent(Content);
             NaveSW.LoadContent(Content);
             Ovnis.LoadContent(Content);
             Pulpito.LoadContent(Content);
             Carteles.LoadContent(Content);
             PowerUpsRocket.LoadContent(Content);
             Tierras.LoadContent(Content);
-            Asteroide.LoadContent(Content);*/
+            Asteroide.LoadContent(Content);
         }
 
         public void Update(GameTime gameTime){
-            //Tierras.Update(gameTime, 1);
+            Tierras.Update(gameTime, 0);
+            Tierras.Update(gameTime, 1);
+            Checkpoint.Update(gameTime, 0);
+            Ovnis.Update(gameTime, 0);
+            Ovnis.Update(gameTime, 1);
         }
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
 

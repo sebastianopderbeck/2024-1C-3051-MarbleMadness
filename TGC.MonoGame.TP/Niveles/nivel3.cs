@@ -167,15 +167,15 @@ namespace TGC.MonoGame.niveles{
 
             Pulpito.agregarPulpito((Vector3.Forward + Vector3.Left) * DistanceBetweenFloor + Vector3.Up * 3); //nos da los ultimos alientos para que logremos ganarr
 
-            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 7) + bajadaEscalera * 2);
-            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 11) + (Vector3.Right * DistanceBetweenFloor * 3) + bajadaEscalera * 2);
-            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 11) + (Vector3.Left * DistanceBetweenFloor * 3) + bajadaEscalera * 2);
-            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 15) + bajadaEscalera * 2);
-            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 17) + bajadaEscalera * 2);
-            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 30) + (Vector3.Left * DistanceBetweenFloor * 1) + alturaEscalera * 5);
-            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 30) + (Vector3.Left * DistanceBetweenFloor * 3) + alturaEscalera * 5);
-            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 30) + (Vector3.Left * DistanceBetweenFloor * 5) + alturaEscalera * 5);
-            
+            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 7) + bajadaEscalera * 2, 1);
+            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 11) + (Vector3.Right * DistanceBetweenFloor * 3) + bajadaEscalera * 2, 0);
+            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 11) + (Vector3.Left * DistanceBetweenFloor * 3) + bajadaEscalera * 2, 1);
+            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 15) + bajadaEscalera * 2, 0);
+            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 17) + bajadaEscalera * 2, 1);
+            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 30) + (Vector3.Left * DistanceBetweenFloor * 1) + alturaEscalera * 5, 0);
+            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 30) + (Vector3.Left * DistanceBetweenFloor * 3) + alturaEscalera * 5, 1);
+            Ovnis.agregarOvni((Vector3.Forward * DistanceBetweenFloor * 30) + (Vector3.Left * DistanceBetweenFloor * 5) + alturaEscalera * 5, 0);
+
             Checkpoint.AgregoCheckpoint((Vector3.Forward * DistanceBetweenFloor * 14) + bajadaEscalera * 2);
 
             Luna.AgregarLuna((Vector3.Forward * DistanceBetweenFloor * 11.5f));
