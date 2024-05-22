@@ -1,12 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+//using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using TGC.MonoGame.Samples.Collisions;
 
 namespace TGC.MonoGame.TP{
     
@@ -26,17 +29,18 @@ namespace TGC.MonoGame.TP{
         private BallMaterial BallType { get; set; }
         public float BallScale { get; set; } = 0.024f;
         public Matrix RotacionBola { get; set; } = Matrix.Identity;
-        public Vector3 VelocidadBola { get; set; } = Vector3.Zero;
-        public Vector3 AceleracionBola { get; set; } = Vector3.Zero;
-        public Vector3 DireccionBola { get; set; }
-        private Vector3 Gravedad = new (0, -3f, 0);
         //New
         public Vector3 BallPosition { get; set; }
         private Vector3 BallFrontDirection { get; set; } = Vector3.Forward;
+        private Vector3 BallLateralDirection { get; set; } = Vector3.Left;
         private Vector3 BallVelocity { get; set; } = Vector3.Zero;
         private float Force { get; set; } = 2f;
         private float BallMass { get; set; } = 1.0f;
         private float Friction { get; set; } = 2f;
+        private float BallJumpSpeed { get; set; } = 100f;
+        public float Gravity = 5f;
+        public BoundingSphere ballSphere;
+        public Vector3 SpawnPoint { get; set; }
 
 
         private bool OnGround { get; set; }
@@ -46,6 +50,7 @@ namespace TGC.MonoGame.TP{
         }
 
         public Ball(Vector3 posicionInicial){
+            SpawnPoint = posicionInicial;
             BallPosition = posicionInicial;
             BallWorld = Matrix.Identity * Matrix.CreateScale(BallScale) * Matrix.CreateTranslation(BallPosition);
             OnGround = false;
@@ -61,79 +66,106 @@ namespace TGC.MonoGame.TP{
                     meshPart.Effect = Effect;
                 }
             }
+
+            //ballSphere = BoundingVolumesExtensions.CreateSphereFrom(BallModel);
+            //ballSphere.Center = BallPosition;
+            //ballSphere.Radius = 1f;
         }
 
         public void Update(GameTime gameTime){
-
-            /*var deltaTime = Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds);
-            var keyboardState = Keyboard.GetState();
-            AceleracionBola = Vector3.Zero;
-            Vector3 friccion = -VelocidadBola * 0.03f;
-
-
-            if (keyboardState.IsKeyDown(Keys.A))
-                AceleracionBola += Vector3.Left;
-            if (keyboardState.IsKeyDown(Keys.D))
-                AceleracionBola += Vector3.Right;
-            if (keyboardState.IsKeyDown(Keys.W))
-                AceleracionBola += Vector3.Forward;
-            if (keyboardState.IsKeyDown(Keys.S))
-                AceleracionBola += Vector3.Backward;
-            if (keyboardState.IsKeyDown(Keys.Space) && (OnGround == true)) {
-                VelocidadBola += Vector3.Up * 150f;
-                OnGround = false;
-            }
-            
-            AceleracionBola += friccion;
-            //AceleracionBola += Gravedad;
-            VelocidadBola += AceleracionBola * 180f * deltaTime;
-            PosicionBola += VelocidadBola * deltaTime;
-
-            var minimumFloor = MathHelper.Max(0f, PosicionBola.Y);
-            PosicionBola = new Vector3(PosicionBola.X, minimumFloor, PosicionBola.Z);
-
-            if (Compare(PosicionBola.Y, 0.0f) && (OnGround == false)) {
-                VelocidadBola = new Vector3(VelocidadBola.X, 0f, VelocidadBola.Z);
-                OnGround = true;
-            }
-
-            Respawn();
-            
-            BallWorld = Matrix.CreateScale(BallScale) * Matrix.CreateTranslation(PosicionBola);
-            */
             Movement(gameTime);
+            Respawn();
             
         }
 
-        public void Movement (GameTime gameTime){
+        public void Movement(GameTime gameTime){
             
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keyboardState = Keyboard.GetState();
-            Vector3 aceleracion = Vector3.Zero;
+            Vector3 aceleracion = Vector3.Down * Gravity;
+            //Vector3 aceleracion = Vector3.Zero;
 
             if (keyboardState.IsKeyDown(Keys.W))
                 aceleracion += BallFrontDirection * (Force / BallMass);
             else if (keyboardState.IsKeyDown(Keys.S))
                 aceleracion += -BallFrontDirection * (Force / BallMass);
             if (keyboardState.IsKeyDown(Keys.A))
-                aceleracion += Vector3.Left * (Force / BallMass);
+                aceleracion += BallLateralDirection * (Force / BallMass);
             else if (keyboardState.IsKeyDown(Keys.D))
-                aceleracion += Vector3.Right * (Force / BallMass);
-            
-            BallVelocity += aceleracion - (Friction * BallVelocity) * deltaTime;
-            BallPosition += BallVelocity * deltaTime;
+                aceleracion += -BallLateralDirection * (Force / BallMass);
 
-            BallWorld = Matrix.CreateScale(BallScale) * Matrix.CreateTranslation(BallPosition);
+            if (keyboardState.IsKeyDown(Keys.Space) && OnGround){
+                BallVelocity += Vector3.Up * BallJumpSpeed;
+                OnGround = false;
+            }
+                
+
+            BallVelocity += aceleracion - (BallVelocity * Friction) * deltaTime;
+
+            //BallPosition += BallVelocity * deltaTime;
+
+
+            //BallWorld = Matrix.CreateScale(BallScale) * Matrix.CreateTranslation(BallPosition);
         }
+
+        public void UpdatePosition(GameTime gameTime){
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            BallPosition += BallVelocity * deltaTime;
+            BallWorld = Matrix.CreateScale(BallScale) * Matrix.CreateTranslation(BallPosition);
+            BallBounding();
+        }
+
+        public void SolveGravity(BoundingBox[] colliders){
+            for (var index = 0; index < colliders.Length; index++)
+            {
+                if (!ballSphere.Intersects(colliders[index]))
+                    continue;
+
+                BallVelocity = new Vector3(BallVelocity.X, 0f, BallVelocity.Z);
+                OnGround = true;
+
+                break;
+            }
+        }
+
+        public void BallBounding(){
+            for (int meshIndex1 = 0; meshIndex1 < BallModel.Meshes.Count; meshIndex1++)
+            {
+                ballSphere = BallModel.Meshes[meshIndex1].BoundingSphere;
+                ballSphere = ballSphere.Transform(BallWorld);
+            }
+        }
+        /*public void SolveGravity(){
+            
+            var _floor = 1.0f;
+            if (BallPosition.Y == _floor)
+                return;
+            OnGround = false;
+
+            
+            
+            var minimumFloor = MathHelper.Max(_floor, BallPosition.Y);
+            BallPosition = new Vector3(BallPosition.X, minimumFloor, BallPosition.Z);
+
+            if (Compare(BallPosition.Y, _floor) && (OnGround == false)) {
+                BallVelocity = new Vector3(BallVelocity.X, 0f, BallVelocity.Z);
+                OnGround = true;
+            }
+        }*/
 
         public void Respawn(/*Checkpoint checkpoint*/){
             if (BallPosition.Y < -100f){
-                BallPosition = new (0f, 10f, 0f);
+                BallPosition = SpawnPoint;
+                BallVelocity = new (0f, 0f, 0f);
             }
         }
 
         public void PickUp(/*Texture newTexture, */){
 
+        }
+
+        public void SetSpawnPoint(Vector3 newSpawnPoint){
+            SpawnPoint = newSpawnPoint;
         }
 
         public void Draw(GameTime gameTime, Matrix view, Matrix projection){
@@ -145,6 +177,12 @@ namespace TGC.MonoGame.TP{
                 Effect.Parameters["World"].SetValue(mesh.ParentBone.Transform * BallWorld);
                 mesh.Draw();
             }
+        }
+
+        public bool Collided(BoundingBox boundedObject){
+            if(ballSphere.Intersects(boundedObject))
+                return true;
+            return false;
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TGC.MonoGame.TP;
 using TGC.MonoGame.niveles;
+using Microsoft.Xna.Framework.Content;
 
 namespace TGC.MonoGame.TP
 {
@@ -21,6 +22,7 @@ namespace TGC.MonoGame.TP
         public const string ContentFolderSounds = "Sounds/";
         public const string ContentFolderSpriteFonts = "SpriteFonts/";
         public const string ContentFolderTextures = "Textures/";
+        public const string ContentFolder = "Content";
 
         /// <summary>
         ///     Constructor del juego.
@@ -50,17 +52,14 @@ namespace TGC.MonoGame.TP
         private Matrix View { get; set; }
         private Matrix Projection { get; set; }
         
-        private Ball Ball{ get; set; }
+        //private Ball Ball{ get; set; }
         private Nivel1 Nivel1 { get; set; }
         private NivelParte2 NivelSegundaParte { get; set; }
         private Nivel2 Nivel2 { get; set; }
         private Nivel3 Nivel3 { get; set; }
         private NivelFinal NivelFinal { get; set; }
-        private FollowCamera Camera { get; set; }
-        private Skybox Skybox { get; set; }
-        float distance = 20;
-        Vector3 cameraPosition;
-        //private Checkpoint Checkpoint{ get; set; }
+        //private FollowCamera Camera { get; set; }
+        //private Skybox Skybox { get; set; }
 
         /// <summary>
         ///     Se llama una sola vez, al principio cuando se ejecuta el ejemplo.
@@ -85,10 +84,10 @@ namespace TGC.MonoGame.TP
             Projection =
                 Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 1, 250);
 
-            Camera = new FollowCamera(GraphicsDevice, new Vector3(0, 5, 15), Vector3.Zero, Vector3.Up);
-            Ball = new Ball(new (0f,30f,0f));
+            //Camera = new FollowCamera(GraphicsDevice, new Vector3(0, 5, 15), Vector3.Zero, Vector3.Up);
+            //Ball = new Ball(new (0f,30f,0f));
 
-            Nivel1 = new Nivel1();
+            Nivel1 = new Nivel1(GraphicsDevice);
             NivelSegundaParte = new NivelParte2(); //segunda parte del nivel uno
 
             //Nivel2 = new Nivel2();
@@ -138,8 +137,8 @@ namespace TGC.MonoGame.TP
             //NivelFinal.LoadContent(Content);
             
 
-            Ball.LoadContent(Content);
-            Skybox = new Skybox(ContentFolderTextures + "Skybox/SkyBox", Content);
+            //Ball.LoadContent(Content);
+            //Skybox = new Skybox(ContentFolderTextures + "Skybox/SkyBox", Content);
 
             base.LoadContent();
         }
@@ -167,9 +166,9 @@ namespace TGC.MonoGame.TP
 
             World = Matrix.CreateScale(0.3f) * Matrix.CreateRotationY(Rotation);
             
-            Ball.Update(gameTime);
+            //Ball.Update(gameTime);
 
-            Camera.Update(Ball.BallPosition);
+            //Camera.Update(Ball.BallPosition);
             Nivel1.Update(gameTime);
 
             base.Update(gameTime);
@@ -195,15 +194,15 @@ namespace TGC.MonoGame.TP
                 mesh.Draw();
             }*/
             
-            Ball.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
-            Nivel1.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
-            NivelSegundaParte.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
+            //Ball.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
+            Nivel1.Draw(gameTime, GraphicsDevice);
+            //NivelSegundaParte.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
 
             //Nivel2.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
 
             //Nivel3.Draw(gameTime, Camera.ViewMatrix, Camera.ProjectionMatrix);
             
-
+            /*
             var originalRasterizerState = GraphicsDevice.RasterizerState;
             var rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
@@ -211,7 +210,7 @@ namespace TGC.MonoGame.TP
 
             Skybox.Draw(Camera.ViewMatrix, Camera.ProjectionMatrix, Ball.BallPosition);
 
-            GraphicsDevice.RasterizerState = originalRasterizerState;
+            GraphicsDevice.RasterizerState = originalRasterizerState;*/
         }
 
         /// <summary>

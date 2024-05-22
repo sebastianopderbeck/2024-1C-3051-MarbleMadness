@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TGC.MonoGame.Samples.Collisions;
 using TGC.MonoGame.TP;
 
 namespace TGC.MonoGame.niveles{
@@ -12,6 +13,7 @@ namespace TGC.MonoGame.niveles{
 
         public const string ContentFolder3D = "Models/";
         public const string ContentFolderEffects = "Effects/";
+        public const string ContentFolderTextures = "Textures/";
         public Model PisoModel { get; set; }
         public Matrix[] PisoWorlds { get; set; }
         public Model ParedModel { get; set; }
@@ -25,6 +27,10 @@ namespace TGC.MonoGame.niveles{
         public PowerUpsRocket PowerUpsRocket{ get; set; }
         public TierraLuminosa Tierras { get; set; }
         public Effect Effect { get; set; }
+        //ASD
+        public Ball Ball { get; set; }
+        public FollowCamera Camera { get; set; }
+        public Skybox Skybox { get; set; }
 
        
         public const float DistanceBetweenFloor = 12.33f;
@@ -38,8 +44,9 @@ namespace TGC.MonoGame.niveles{
         // ____ World matrices ____
         //matrices de las plataformas fijas (pisos)
         //matrices tipo lista para que tengan los pisos flotantes
+        public BoundingBox[] Colliders { get; set; }
          
-        public Nivel1() {
+        public Nivel1(GraphicsDevice graphicsDevice) {
 
             Ovnis = new Ovni();
             Pulpito = new Pulpito();
@@ -50,6 +57,9 @@ namespace TGC.MonoGame.niveles{
             Tierras = new TierraLuminosa();
             Asteroide = new Asteroide();
             //NaveEspecial = new NaveEspecial();
+
+            Ball = new Ball(new (0f,30f,0f));
+            Camera = new FollowCamera(graphicsDevice, new Vector3(0, 5, 15), Vector3.Zero, Vector3.Up);
           
             Initialize();
 
@@ -155,6 +165,16 @@ namespace TGC.MonoGame.niveles{
             
         };
 
+            Colliders = new BoundingBox[PisoWorlds.Length];
+            var _scale = new Vector3(500f, 150f, 500f);
+            int index = 0;
+            for (; index < PisoWorlds.Length; index++){
+                Colliders[index] = BoundingVolumesExtensions.FromMatrix(PisoWorlds[index]);
+                Colliders[index] = BoundingVolumesExtensions.Scale(Colliders[index], _scale);
+                //Colliders[index] = new BoundingBox(new Vector3(-6.11f, -0.001f, -6.11f), new Vector3(6.11f, 0f, 6.11f));
+            }
+                
+
                        
             //Enemigos
             Ovnis.agregarOvni(Vector3.Forward * (DistanceBetweenFloor * 7 + distanciaEscaleras * 3) + Vector3.Left * DistanceBetweenFloor * 2 + alturaEscalera * 3 + Vector3.Up * 2, 1);
@@ -177,6 +197,8 @@ namespace TGC.MonoGame.niveles{
             Tierras.agregarTierraLuminosa(new Vector3(-50f, 25f, -34f));
             Tierras.agregarTierraLuminosa(new Vector3(-50f, 35f, -120));
             Asteroide.AgregarAsteroide(new Vector3(25f, 35f, -90));
+
+
 
 
         }
@@ -209,6 +231,9 @@ namespace TGC.MonoGame.niveles{
             PowerUpsRocket.LoadContent(Content);
             Tierras.LoadContent(Content);
             Asteroide.LoadContent(Content);
+
+            Ball.LoadContent(Content);
+            Skybox = new Skybox(ContentFolderTextures + "Skybox/SkyBox", Content);
         }
 
         public void Update(GameTime gameTime){
@@ -217,8 +242,22 @@ namespace TGC.MonoGame.niveles{
             Checkpoint.Update(gameTime, 0);
             Ovnis.Update(gameTime, 0);
             Ovnis.Update(gameTime, 1);
+
+            Ball.Movement(gameTime);
+            Ball.SolveGravity(Colliders);
+            Ball.UpdatePosition(gameTime);
+
+            CheckPointCollision();
+            Ball.Respawn();
+
+
+            Camera.Update(Ball.BallPosition);
+
+
         }
-        public void Draw(GameTime gameTime, Matrix view, Matrix projection){
+        public void Draw(GameTime gameTime, GraphicsDevice graphicsDevice){
+            var view = Camera.ViewMatrix;
+            var projection = Camera.ProjectionMatrix;
 
             //PisoModel.Draw(PisoWorlds, view, projection);
             Effect.Parameters["View"].SetValue(view);
@@ -255,8 +294,27 @@ namespace TGC.MonoGame.niveles{
             Tierras.Draw(gameTime, view, projection);
             Asteroide.Draw(gameTime, view, projection);
             //NaveEspecial.Draw(gameTime, view, projection);
+            Ball.Draw(gameTime, view, projection);
 
 
+            var originalRasterizerState = graphicsDevice.RasterizerState;
+            var rasterizerState = new RasterizerState();
+            rasterizerState.CullMode = CullMode.None;
+            graphicsDevice.RasterizerState = rasterizerState;
+
+            Skybox.Draw(Camera.ViewMatrix, Camera.ProjectionMatrix, Ball.BallPosition);
+
+            graphicsDevice.RasterizerState = originalRasterizerState;
+
+
+        }
+
+        public void CheckPointCollision(){
+            for(int index = 0; index < Checkpoint.CheckpointWorlds.Length; index++){
+                if(Ball.Collided(Checkpoint.CheckpointBox[index]))
+                    Ball.SetSpawnPoint(Checkpoint.Posicion[index]);
+                    
+            }
         }
 
     }

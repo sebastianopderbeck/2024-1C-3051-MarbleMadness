@@ -2,6 +2,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using TGC.MonoGame.Samples.Collisions;
 
 namespace TGC.MonoGame.TP{
 
@@ -11,18 +12,20 @@ namespace TGC.MonoGame.TP{
         public const string ContentFolderEffects = "Effects/";
         public Model CheckpointModel{get; set;}
         public Matrix[] CheckpointWorlds{get; set;}
-        private Vector3[] Posicion { get; set; }
+        public Vector3[] Posicion { get; set; }
         private Vector3[] PosicionInicial { get; set; }
         public Effect Effect { get; set; }
         private float Scale { get; set; }
         private float _rotation = 0f;
         private const float _rotationSpeed = 0.5f;
         private int MovementDirecion = 1;
+        public BoundingBox[] CheckpointBox { get; set; }
 
         public Checkpoint(){
             CheckpointWorlds = new Matrix[]{};
             Posicion = new Vector3[]{};
             PosicionInicial = new Vector3[]{};
+            CheckpointBox = new BoundingBox[]{};
         }
 
         public void AgregoCheckpoint(Vector3 Position){
@@ -36,6 +39,14 @@ namespace TGC.MonoGame.TP{
             };
             Posicion = Posicion.Concat(nuevaPosicion).ToArray();
             PosicionInicial = PosicionInicial.Concat(nuevaPosicion).ToArray();
+            BoundingBox aux = new BoundingBox();
+            aux = BoundingVolumesExtensions.FromMatrix(nuevoCheckpoint[0]);
+            aux = BoundingVolumesExtensions.Scale(aux, 500f);
+
+            var newBoundingBox = new BoundingBox[]{
+                aux,
+            };
+            CheckpointBox = CheckpointBox.Concat(newBoundingBox).ToArray();
         }
 
         public void LoadContent(ContentManager Content){
